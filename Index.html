@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Monochrome To-Do</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.5;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Login page styles */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 340px;
+            border: 2px solid #000000;
+            border-radius: 12px;
+            padding: 30px 25px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .app-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .app-subtitle {
+            font-size: 1rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+            color: #333333;
+        }
+
+        .input-group {
+            margin-bottom: 22px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1rem;
+            background-color: #ffffff;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #555555;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background-color: #333333;
+        }
+
+        .demo-credentials {
+            margin-top: 25px;
+            padding: 15px;
+            border: 1px dashed #000000;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            background-color: #f5f5f5;
+        }
+
+        /* To-do app page styles */
+        .app-container {
+            display: none;
+            flex-direction: column;
+            min-height: 100vh;
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 18px;
+            border-bottom: 2px solid #000000;
+            background-color: #ffffff;
+        }
+
+        .header-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logout-btn {
+            padding: 10px 18px;
+            background-color: #ffffff;
+            color: #000000;
+            border: 2px solid #000000;
+            border-radius: 6px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .todo-main {
+            flex: 1;
+            padding: 20px 18px 30px;
+            overflow-y: auto;
+        }
+
+        .add-todo-form {
+            display: flex;
+            margin-bottom: 25px;
+            gap: 12px;
+        }
+
+        .add-todo-input {
+            flex: 1;
+            padding: 16px 18px;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1rem;
+        }
+
+        .add-todo-btn {
+            padding: 16px 24px;
+            background-color: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .add-todo-btn:hover {
+            background-color: #333333;
+        }
+
+        .todo-list-container {
+            margin-top: 10px;
+        }
+
+        .todo-list-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 18px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #cccccc;
+        }
+
+        .todo-list {
+            list-style-type: none;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 18px 16px;
+            margin-bottom: 12px;
+            border: 2px solid #000000;
+            border-radius: 8px;
+            background-color: #ffffff;
+            transition: all 0.2s;
+        }
+
+        .todo-item:hover {
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .todo-checkbox {
+            margin-right: 16px;
+            transform: scale(1.4);
+            accent-color: #000000;
+        }
+
+        .todo-text {
+            flex: 1;
+            font-size: 1.05rem;
+            word-break: break-word;
+            padding-right: 10px;
+        }
+
+        .todo-text.completed {
+            text-decoration: line-through;
+            color: #666666;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: #000000;
+            padding: 0 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666666;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .empty-state-text {
+            font-size: 1.1rem;
+        }
+
+        /* Responsive styles for mobile only */
+        @media (max-width: 480px) {
+            .login-box {
+                padding: 25px 20px;
+                max-width: 320px;
+            }
+
+            .app-title {
+                font-size: 2rem;
+            }
+
+            .header-title {
+                font-size: 1.6rem;
+            }
+
+            .add-todo-form {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .add-todo-btn {
+                padding: 14px;
+            }
+        }
+
+        /* Hide on non-mobile devices */
+        @media (min-width: 768px) {
+            body::before {
+                content: "This app is designed for mobile devices only. Please view on a smaller screen.";
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: #ffffff;
+                color: #000000;
+                font-size: 1.5rem;
+                text-align: center;
+                padding: 20px;
+                z-index: 1000;
+            }
+            
+            .login-container, .app-container {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div class="login-container" id="loginPage">
+        <div class="login-box">
+            <h1 class="app-title">To-Do</h1>
+            <p class="app-subtitle">Organize your tasks efficiently</p>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter your username" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                
+                <div id="loginError" style="color: #ff3333; font-size: 0.9rem; margin-bottom: 15px; display: none;">
+                    Invalid username or password
+                </div>
+                
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+            
+            <div class="demo-credentials">
+                <p><strong>Demo Credentials:</strong></p>
+                <p>Username: <strong>user</strong></p>
+                <p>Password: <strong>todo123</strong></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- To-Do App Page -->
+    <div class="app-container" id="appPage">
+        <header class="app-header">
+            <h1 class="header-title">My Tasks</h1>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+        </header>
+        
+        <main class="todo-main">
+            <form class="add-todo-form" id="addTodoForm">
+                <input type="text" class="add-todo-input" id="todoInput" placeholder="Add a new task..." required>
+                <button type="submit" class="add-todo-btn">Add</button>
+            </form>
+            
+            <div class="todo-list-container">
+                <h2 class="todo-list-title">Tasks</h2>
+                
+                <div id="emptyState" class="empty-state">
+                    <div class="empty-state-icon">📝</div>
+                    <p class="empty-state-text">No tasks yet. Add a task to get started!</p>
+                </div>
+                
+                <ul class="todo-list" id="todoList">
+                    <!-- To-do items will be added here dynamically -->
+                </ul>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // DOM Elements
+        const loginPage = document.getElementById('loginPage');
+        const appPage = document.getElementById('appPage');
+        const loginForm = document.getElementById('loginForm');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginError = document.getElementById('loginError');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const addTodoForm = document.getElementById('addTodoForm');
+        const todoInput = document.getElementById('todoInput');
+        const todoList = document.getElementById('todoList');
+        const emptyState = document.getElementById('emptyState');
+
+        // Demo credentials
+        const DEMO_USER = 'user';
+        const DEMO_PASS = 'todo123';
+
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('todoAppLoggedIn');
+            const savedTodos = localStorage.getItem('todoAppTasks');
+            
+            if (isLoggedIn === 'true') {
+                showAppPage();
+                
+                // Load saved todos
+                if (savedTodos) {
+                    const todos = JSON.parse(savedTodos);
+                    renderTodos(todos);
+                }
+            } else {
+                showLoginPage();
+            }
+        });
+
+        // Show login page
+        function showLoginPage() {
+            loginPage.style.display = 'flex';
+            appPage.style.display = 'none';
+            loginForm.reset();
+            loginError.style.display = 'none';
+        }
+
+        // Show app page
+        function showAppPage() {
+            loginPage.style.display = 'none';
+            appPage.style.display = 'flex';
+            todoInput.focus();
+        }
+
+        // Login form submission
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+            
+            // Simple validation
+            if (username === DEMO_USER && password === DEMO_PASS) {
+                // Successful login
+                localStorage.setItem('todoAppLoggedIn', 'true');
+                showAppPage();
+            } else {
+                // Failed login
+                loginError.style.display = 'block';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        });
+
+        // Logout functionality
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('todoAppLoggedIn');
+            showLoginPage();
+        });
+
+        // Get todos from localStorage
+        function getTodos() {
+            const todos = localStorage.getItem('todoAppTasks');
+            return todos ? JSON.parse(todos) : [];
+        }
+
+        // Save todos to localStorage
+        function saveTodos(todos) {
+            localStorage.setItem('todoAppTasks', JSON.stringify(todos));
+        }
+
+        // Render todos to the UI
+        function renderTodos(todos) {
+            // Clear the current list
+            todoList.innerHTML = '';
+            
+            // If no todos, show empty state
+            if (todos.length === 0) {
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            // Hide empty state
+            emptyState.style.display = 'none';
+            
+            // Render each todo item
+            todos.forEach((todo, index) => {
+                const todoItem = document.createElement('li');
+                todoItem.className = 'todo-item';
+                todoItem.innerHTML = `
+                    <input type="checkbox" class="todo-checkbox" id="todo-${index}" ${todo.completed ? 'checked' : ''}>
+                    <span class="todo-text ${todo.completed ? 'completed' : ''}">${todo.text}</span>
+                    <button class="delete-btn" data-index="${index}">×</button>
+                `;
+                
+                todoList.appendChild(todoItem);
+                
+                // Add event listener to checkbox
+                const checkbox = todoItem.querySelector('.todo-checkbox');
+                checkbox.addEventListener('change', () => toggleTodoComplete(index));
+                
+                // Add event listener to delete button
+                const deleteBtn = todoItem.querySelector('.delete-btn');
+                deleteBtn.addEventListener('click', () => deleteTodo(index));
+            });
+        }
+
+        // Add new todo
+        addTodoForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const text = todoInput.value.trim();
+            if (text === '') return;
+            
+            const todos = getTodos();
+            todos.push({ text, completed: false });
+            saveTodos(todos);
+            renderTodos(todos);
+            
+            // Clear input and focus
+            todoInput.value = '';
+            todoInput.focus();
+        });
+
+        // Toggle todo completion
+        function toggleTodoComplete(index) {
+            const todos = getTodos();
+            todos[index].completed = !todos[index].completed;
+            saveTodos(todos);
+            renderTodos(todos);
+        }
+
+        // Delete todo
+        function deleteTodo(index) {
+            const todos = getTodos();
+            todos.splice(index, 1);
+            saveTodos(todos);
+            renderTodos(todos);
+        }
+
+        // Initialize with some sample todos if none exist
+        window.addEventListener('load', () => {
+            const todos = getTodos();
+            if (todos.length === 0) {
+                const sampleTodos = [
+                    { text: 'Create a new to-do app', completed: true },
+                    { text: 'Design in black and white', completed: true },
+                    { text: 'Make it mobile responsive', completed: false },
+                    { text: 'Test the login functionality', completed: false }
+                ];
+                saveTodos(sampleTodos);
+                
+                // If user is logged in, render the sample todos
+                if (localStorage.getItem('todoAppLoggedIn') === 'true') {
+                    renderTodos(sampleTodos);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
