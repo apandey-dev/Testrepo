@@ -1,0 +1,468 @@
+/* ================================
+   SOURCE: css/style.css (partial), css/pin-filter.css, css/chip-context-menu.css
+   PURPOSE: Theme variables, dark theme, editor colors, text formatting, and component themes
+   ================================ */
+
+/* --- ZEN MODE --- */
+body.zen-active #toolbar,
+body.zen-active #chips-bar {
+    display: none !important;
+}
+
+body.zen-active #zen-exit-btn {
+    display: flex;
+}
+
+body.zen-active #editor-container {
+    padding-top: 20px;
+}
+
+/* Custom font classes */
+.kalam {
+    font-family: 'Kalam', cursive;
+}
+
+.pacifico {
+    font-family: 'Pacifico', cursive;
+}
+
+.satisfy {
+    font-family: 'Satisfy', cursive;
+}
+
+/* --- FOCUS MODE STYLES (NEW) --- */
+/* When active, dim everything in editor */
+.focus-mode-active>* {
+    opacity: 0.15;
+    /* Dimmed state */
+    transition: opacity 0.4s ease;
+    filter: blur(0.5px);
+    /* Subtle blur for better focus on active */
+}
+
+/* The active block stays bright */
+.focus-mode-active>.focused-block {
+    opacity: 1;
+    filter: none;
+}
+
+/* Focus Mode Styling */
+#editor.focus-mode-active>*:not(.focused-block) {
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+}
+
+#editor.focus-mode-active>.focused-block {
+    opacity: 1;
+}
+
+/* Highlight style for search results */
+.search-highlight {
+    background-color: #fbc531;
+    color: #000 !important;
+    border-radius: 2px;
+    box-shadow: 0 0 4px #fbc531;
+}
+
+.search-highlight.current {
+    background-color: #ff9f43;
+    box-shadow: 0 0 6px #ff9f43;
+}
+
+/* --- CODE BLOCKS (NEW) --- */
+pre.code-block {
+    background-color: #1e1e1e;
+    /* Darker than editor */
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 12px;
+    font-family: monospace;
+    color: #d4d4d4;
+    white-space: pre-wrap;
+    margin: 10px 0;
+    position: relative;
+    tab-size: 4;
+}
+
+pre.code-block code {
+    font-family: monospace;
+}
+
+/* Syntax Highlighting Colors - VS Code Style */
+.code-keyword {
+    color: #569cd6;
+    font-weight: bold;
+}
+
+/* Blue (const, let, function) */
+.code-string {
+    color: #ce9178;
+}
+
+/* Orange ("string") */
+.code-comment {
+    color: #6a9955;
+    font-style: italic;
+}
+
+/* Green (// comment) */
+.code-number {
+    color: #b5cea8;
+}
+
+/* Light Green (123) */
+.code-function {
+    color: #dcdcaa;
+}
+
+/* Yellow (funcName) */
+
+/* --- SHARE MODAL STYLES (NEW) --- */
+.share-container {
+    text-align: left;
+    margin-top: 10px;
+}
+
+.share-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1a1a1a;
+    padding: 15px 10px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    margin-bottom: 20px;
+}
+
+.share-label {
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.share-sub {
+    color: #888;
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    width: 50px;
+    height: 26px;
+    cursor: pointer;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+    background-color: #333;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 4px;
+    background-color: #888;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: #22d3ee;
+    /* Cyan brand color */
+}
+
+input:checked+.slider:before {
+    transform: translateX(24px);
+    background-color: #fff;
+}
+
+/* Link Box */
+.link-box {
+    display: flex;
+    gap: 8px;
+    opacity: 0.5;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.link-box.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.link-input {
+    flex: 1;
+    background: #000;
+    border: 1px solid #333;
+    color: #888;
+    padding: 10px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 13px;
+    outline: none;
+}
+
+#btn-copy {
+    width: auto;
+    padding: 0 15px;
+    background: #222;
+    color: #fff;
+    border: 1px solid #333;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#btn-copy:hover {
+    background: #333;
+}
+
+/* Export Modal Styles */
+.export-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.export-option-btn {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 16px;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 12px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    width: 100%;
+}
+
+.export-option-btn i {
+    font-size: 32px;
+    color: #888;
+}
+
+.export-option-btn:hover {
+    background: #1a1a1a;
+    border-color: #555;
+    transform: translateY(-2px);
+}
+
+.export-option-btn:hover i {
+    color: #fff;
+}
+
+.export-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.export-desc {
+    font-size: 12px;
+    color: #888;
+}
+
+/* Custom Dividers */
+.custom-divider {
+    width: 100%;
+    margin: 15px 0;
+    border: 0;
+    display: block;
+}
+
+.divider-double {
+    border-top: 3px double #666;
+}
+
+.divider-dashed {
+    border-top: 2px dashed #666;
+}
+
+@media print {
+    .custom-divider {
+        opacity: 1 !important;
+        visibility: visible !important;
+        margin: 10px 0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .divider-double {
+        border-top: 3px double #000 !important;
+    }
+
+    .divider-dashed {
+        border-top: 2px dashed #000 !important;
+    }
+}
+
+/* ================================
+   SOURCE: css/pin-filter.css
+   PURPOSE: Pin filter button and pinned view theme styles
+   ================================ */
+
+/* Pin Filter Button */
+.pin-filter-btn {
+    background: transparent;
+    color: #888;
+    border: 3px solid #e3dcdc;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pin-filter-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    border-color: #ddd;
+}
+
+.pin-filter-btn.active {
+    background: #fbbf24;
+    color: #1f2937;
+    border-color: #fbbf24;
+}
+
+/* Pinned-only view styles */
+body.pinned-view .chip {
+    background: #1f2937;
+    border: 2px solid #fbbf24;
+    color: #ffffff;
+    transition: all 0.15s ease;
+}
+
+body.pinned-view .chip:hover {
+    border-color: #facc15;
+    background: #2d3748;
+}
+
+body.pinned-view .chip.active {
+    border: 2px solid #fbbf24;
+    box-shadow: 0 0 0 2px #3b82f6;
+    background: #374151;
+}
+
+body.pinned-view .chip .dot {
+    display: none;
+}
+
+/* Empty state for pinned view */
+body.pinned-view .chip-empty {
+    background: transparent;
+    border: 2px dashed #fbbf24;
+    color: #888;
+}
+
+body.pinned-view .chip-empty:hover {
+    background: transparent;
+    border-color: #fbbf24;
+}
+
+/* Pinned chips styling in NORMAL view */
+.chip.pinned {
+    background: #1f2937;
+    border: 2px solid #fbbf24;
+    color: #ffffff;
+}
+
+.chip.pinned:hover {
+    border-color: #facc15;
+    background: #2d3748;
+}
+
+.chip.pinned.active {
+    border: 2px solid #fbbf24;
+    box-shadow: 0 0 0 2px #3b82f6;
+    background: #374151;
+}
+
+/* ================================
+   SOURCE: css/chip-context-menu.css
+   PURPOSE: Chip context menu theme styles
+   ================================ */
+
+/* Chip Context Menu */
+.chip-context-menu {
+    position: fixed;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 4px;
+    min-width: 160px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+    animation: contextMenuFadeIn 0.15s ease;
+}
+
+@keyframes contextMenuFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.context-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    color: #ccc;
+    font-size: 13px;
+    font-family: 'Fredoka', sans-serif;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.15s;
+}
+
+.context-menu-item:hover {
+    background: #2a2a2a;
+    color: #fff;
+}
+
+.context-menu-item i {
+    font-size: 16px;
+}
+
+.context-menu-item.danger {
+    color: #ff6b6b;
+}
+
+.context-menu-item.danger:hover {
+    background: rgba(255, 107, 107, 0.1);
+    color: #ff4444;
+}
+
+.context-menu-divider {
+    height: 1px;
+    background: #333;
+    margin: 4px 0;
+}
