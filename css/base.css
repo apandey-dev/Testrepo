@@ -54,6 +54,8 @@
 
     /* --- THEME PALETTE (Dark Mode Defaults - Bright/Pastel for contrast) --- */
     --color-neutral: #ffffff;
+    --editor-text-color: #ffffff;
+    /* Explicit Default White for Night Mode */
     /* White in Dark Mode */
     --color-red: #f87171;
     /* Red-400 */
@@ -82,6 +84,8 @@ body[data-theme="light"] {
     --bg-input: #f8f9fa;
 
     --text-primary: #000000;
+    --editor-text-color: #000000;
+    /* Explicit Black for Day Mode */
     --text-secondary: #333333;
     --text-tertiary: #555;
     --text-muted: #666;
@@ -1185,7 +1189,7 @@ html {
     width: 100%;
     height: 100%;
     background-color: var(--bg-primary);
-    color: var(--text-primary);
+    color: var(--editor-text-color);
     font-family: var(--editor-font, "Playpen Sans"), cursive;
     font-size: var(--editor-font-size, 18px);
     font-weight: 400;

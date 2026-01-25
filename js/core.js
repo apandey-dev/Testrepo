@@ -570,9 +570,9 @@ const Store = {
     },
 
     save: function () {
-        // Check if auto-save is enabled
-        const settings = Settings.getSettings ? Settings.getSettings() : { autoSave: true };
-        if (settings.autoSave === false) return;
+        // Auto-save is always enabled now
+        // const settings = Settings.getSettings ? Settings.getSettings() : { autoSave: true };
+        // if (settings.autoSave === false) return;
 
         this.cancelSave();
         // Mark as unsaved visually

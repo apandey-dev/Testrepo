@@ -542,6 +542,11 @@ const UI = {
     modalCallback: null,
 
     openModal: function (mode, titleOrId, msgOrLabel = null, callback = null) {
+        if (mode === 'settings') {
+            SettingsUI.toggleModal(true);
+            return;
+        }
+
         this.currentModalMode = mode;
         this.modalCallback = callback;
 
@@ -685,6 +690,9 @@ const UI = {
 
             this.els.btnConfirm.innerText = "Close";
             this.els.btnCancel.style.display = "none";
+
+        } else if (mode === 'settings') {
+            SettingsUI.toggleModal(true);
         }
     },
 
@@ -739,6 +747,129 @@ const UI = {
         if (success) {
             this.closeModal();
         }
+    }
+};
+
+/* ================================
+   SOURCE: js/settings-ui.js
+   PURPOSE: Premium Settings Modal Logic
+   ================================ */
+const SettingsUI = {
+    toggleModal: function (show) {
+        const overlay = document.getElementById('settings-modal-overlay');
+        if (!overlay) return;
+
+        if (show) {
+            this.init(); // Sync state before showing
+            overlay.style.display = 'flex';
+            // Force reflow
+            void overlay.offsetWidth;
+            overlay.classList.add('visible');
+        } else {
+            overlay.classList.remove('visible');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 300);
+        }
+    },
+
+    init: function () {
+        // 1. Restore Theme
+        const storedTheme = localStorage.getItem('theme') || 'dark';
+        this.setTheme(storedTheme, false);
+
+        // 2. Initialize Dropdown Listeners (Once)
+        if (!this.listenersInitialized) {
+            this.initDropdownListeners();
+            this.listenersInitialized = true;
+        }
+    },
+
+    setTheme: function (theme, save = true) {
+        document.body.setAttribute('data-theme', theme);
+        const control = document.getElementById('themeControl');
+        if (control) control.setAttribute('data-state', theme);
+        if (save) localStorage.setItem('theme', theme);
+    },
+
+    setFont: function (fontKey, element) {
+        this.updateDropdownUI(element);
+
+        const fontMap = {
+            'playpen': 'Playpen Sans',
+            'kalam': 'Kalam',
+            'fredoka': 'Fredoka'
+        };
+        const font = fontMap[fontKey] || fontKey;
+
+        // Apply globally to editor via inline style (affecting default)
+        const editor = document.getElementById('editor');
+        if (editor) {
+            editor.style.fontFamily = `"${font}", cursive`;
+            // Also update the CSS variable for good measure
+            document.documentElement.style.setProperty('--editor-font', font);
+            // Save preference
+            localStorage.setItem('editorFont', font);
+        }
+    },
+
+    setFontSize: function (size, element) {
+        this.updateDropdownUI(element);
+
+        const editor = document.getElementById('editor');
+        if (editor) {
+            editor.style.fontSize = `${size}px`;
+            localStorage.setItem('editorFontSize', size);
+        }
+    },
+
+
+
+    updateDropdownUI: function (element) {
+        const dropdown = element.closest('.custom-dropdown');
+        const triggerText = dropdown.querySelector('.selected-text');
+        const options = dropdown.querySelectorAll('.option');
+
+        options.forEach(opt => opt.classList.remove('selected'));
+        element.classList.add('selected');
+
+        // Update text
+        // Clone contents to keep any icons in trigger if we wanted, 
+        // but for now just text is fine or copy HTML minus the check icon
+        if (triggerText) {
+            // Extract text only from the option (ignoring SVG)
+            triggerText.innerText = element.innerText.trim();
+            // If it's the font dropdown, also update the font-family of the trigger text
+            if (element.style.fontFamily) {
+                triggerText.style.fontFamily = element.style.fontFamily;
+            }
+        }
+
+        dropdown.classList.remove('open');
+    },
+
+    initDropdownListeners: function () {
+        const dropdowns = document.querySelectorAll('.custom-dropdown');
+
+        dropdowns.forEach(dropdown => {
+            const trigger = dropdown.querySelector('.dropdown-trigger');
+
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Close others
+                dropdowns.forEach(d => {
+                    if (d !== dropdown) d.classList.remove('open');
+                });
+                dropdown.classList.toggle('open');
+            });
+        });
+
+        // Close on outside click
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.custom-dropdown')) {
+                dropdowns.forEach(d => d.classList.remove('open'));
+            }
+        });
     }
 };
 
@@ -2308,3 +2439,8 @@ function setupListeners() {
         Logic.deferredPrompt = null;
     });
 }
+
+// Expose Globals for Inline Handlers
+window.UI = UI;
+window.Logic = Logic;
+window.SettingsUI = SettingsUI;
