@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monochrome Pro UI Kit</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Playpen+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-presentation: #E0E0E0;
+            --screen-bg: #FFFFFF;
+            --text-primary: #111111;
+            --text-secondary: #757575;
+
+            /* Font Variables */
+            --font-head: 'Fredoka', sans-serif;
+            --font-body: 'Playpen Sans', cursive;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-presentation);
+            font-family: var(--font-body);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Top align for scrolling */
+            min-height: 100vh;
+            padding: 60px;
+            overflow-x: auto;
+            /* Allow horizontal scroll if screens are many */
+        }
+
+        .container {
+            display: flex;
+            gap: 50px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            max-width: 1800px;
+        }
+
+        /* --- MOBILE SCREEN FRAME --- */
+        .screen {
+            width: 360px;
+            height: 760px;
+            background-color: var(--screen-bg);
+            border-radius: 40px;
+            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            border: 10px solid #111;
+            flex-shrink: 0;
+            /* Prevent shrinking */
+        }
+
+        .home-indicator {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 5px;
+            background-color: #000;
+            border-radius: 10px;
+            opacity: 0.2;
+            z-index: 10;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: var(--font-head);
+            color: var(--text-primary);
+        }
+
+        .title-lg {
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .title-md {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .text-sm {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* --- COMMON COMPONENTS --- */
+        .header {
+            padding: 30px 24px 15px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            z-index: 5;
+        }
+
+        .icon-btn {
+            background: transparent;
+            border: 1px solid #EAEAEA;
+            width: 44px;
+            height: 44px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #000;
+        }
+
+        .icon-btn:hover {
+            background: #F5F5F5;
+            border-color: #000;
+        }
+
+        .content {
+            padding: 10px 24px 24px 24px;
+            flex: 1;
+            overflow-y: auto;
+            /* Hide Scrollbar */
+            scrollbar-width: none;
+        }
+
+        .content::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Bottom Nav (New!) */
+        .bottom-nav {
+            height: 80px;
+            border-top: 1px solid #F0F0F0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 10px;
+            background: #fff;
+        }
+
+        .nav-icon {
+            font-size: 24px;
+            color: #CCC;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .nav-icon.active {
+            color: #000;
+        }
+
+        .nav-dot {
+            width: 5px;
+            height: 5px;
+            background: #000;
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        .nav-icon.active .nav-dot {
+            opacity: 1;
+        }
+
+        /* --- WIDGETS --- */
+
+        /* 1. Task Card */
+        .task-card {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid #EEE;
+            border-radius: 20px;
+            background: #fff;
+            transition: 0.2s;
+        }
+
+        .task-card:hover {
+            border-color: #000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #000;
+            border-radius: 8px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .checkbox.checked {
+            background: #000;
+        }
+
+        .checkbox.checked i {
+            color: #fff;
+            font-size: 14px;
+        }
+
+        /* 2. Pill Nav (Reused) */
+        .pill-nav-container {
+            background: #F4F4F4;
+            border-radius: 50px;
+            padding: 5px;
+            display: flex;
+            position: relative;
+            margin: 10px 0 20px 0;
+        }
+
+        .pill-slider {
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            bottom: 5px;
+            width: calc(33.33% - 4px);
+            background: #000;
+            border-radius: 40px;
+            z-index: 1;
+        }
+
+        .pill-item {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            font-family: var(--font-head);
+            font-weight: 600;
+            font-size: 13px;
+            z-index: 2;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .pill-item.active {
+            color: #fff;
+        }
+
+        /* 3. Calendar Grid */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .day-name {
+            font-size: 12px;
+            color: #AAA;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .date-cell {
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-family: var(--font-head);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .date-cell.active {
+            background: #000;
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .date-cell.has-dot::after {
+            content: '';
+            width: 4px;
+            height: 4px;
+            background: #000;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 5px;
+        }
+
+        .date-cell.active::after {
+            background: #fff;
+        }
+
+        /* 4. Settings/Profile Items */
+        .stat-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            flex: 1;
+            background: #FAFAFA;
+            border: 1px solid #EEE;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 32px;
+            font-weight: 700;
+            color: #000;
+            font-family: var(--font-head);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #777;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid #F5F5F5;
+        }
+
+        .setting-label {
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toggle-switch {
+            width: 44px;
+            height: 24px;
+            background: #E0E0E0;
+            border-radius: 50px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            transition: 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.on {
+            background: #000;
+        }
+
+        .toggle-switch.on::after {
+            left: 22px;
+        }
+
+        /* Screen Labels */
+        .screen-name {
+            position: absolute;
+            bottom: -40px;
+            width: 100%;
+            text-align: center;
+            font-family: var(--font-head);
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ========== NEW ADDITIONS START HERE ========== */
+        /* Night Mode Variables */
+        .dark-mode {
+            --bg-presentation: #1A1A1A;
+            --screen-bg: #000000;
+            --text-primary: #FFFFFF;
+            --text-secondary: #AAAAAA;
+            border-color: #333;
+        }
+
+        .dark-mode .screen {
+            background-color: var(--screen-bg);
+            border-color: #333;
+        }
+
+        .dark-mode .header {
+            background: #000;
+        }
+
+        .dark-mode .bottom-nav {
+            background: #000;
+            border-top-color: #333;
+        }
+
+        .dark-mode .nav-icon {
+            color: #666;
+        }
+
+        .dark-mode .nav-icon.active {
+            color: #fff;
+        }
+
+        .dark-mode .nav-dot {
+            background: #fff;
+        }
+
+        .dark-mode .home-indicator {
+            background-color: #fff;
+        }
+
+        .dark-mode .icon-btn {
+            border-color: #333;
+            color: #fff;
+        }
+
+        .dark-mode .icon-btn:hover {
+            background: #333;
+            border-color: #666;
+        }
+
+        .dark-mode .task-card {
+            background: #111;
+            border-color: #333;
+        }
+
+        .dark-mode .task-card:hover {
+            border-color: #666;
+        }
+
+        .dark-mode .checkbox {
+            border-color: #fff;
+        }
+
+        .dark-mode .checkbox.checked {
+            background: #fff;
+        }
+
+        .dark-mode .checkbox.checked i {
+            color: #000;
+        }
+
+        .dark-mode .pill-nav-container {
+            background: #222;
+        }
+
+        .dark-mode .pill-slider {
+            background: #fff;
+        }
+
+        .dark-mode .pill-item {
+            color: #666;
+        }
+
+        .dark-mode .pill-item.active {
+            color: #000;
+        }
+
+        .dark-mode .calendar-grid .day-name {
+            color: #666;
+        }
+
+        .dark-mode .date-cell {
+            color: #fff;
+        }
+
+        .dark-mode .date-cell.active {
+            background: #fff;
+            color: #000;
+        }
+
+        .dark-mode .date-cell.has-dot::after {
+            background: #fff;
+        }
+
+        .dark-mode .date-cell.active::after {
+            background: #000;
+        }
+
+        .dark-mode .stat-card {
+            background: #111;
+            border-color: #333;
+        }
+
+        .dark-mode .stat-num {
+            color: #fff;
+        }
+
+        .dark-mode .stat-label {
+            color: #aaa;
+        }
+
+        .dark-mode .setting-item {
+            border-bottom-color: #333;
+        }
+
+        .dark-mode .toggle-switch {
+            background: #333;
+        }
+
+        .dark-mode .toggle-switch.on {
+            background: #fff;
+        }
+
+        .dark-mode .toggle-switch.on::after {
+            background: #000;
+        }
+
+        /* Pill Form Styles */
+        .pill-form-container {
+            padding: 30px 24px;
+        }
+
+        .pill-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .pill-input {
+            padding: 18px 24px;
+            border: 2px solid #EEE;
+            border-radius: 50px;
+            font-family: var(--font-body);
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+            background: #fff;
+        }
+
+        .pill-input:focus {
+            border-color: #000;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .pill-select {
+            padding: 18px 24px;
+            border: 2px solid #EEE;
+            border-radius: 50px;
+            font-family: var(--font-body);
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+            background: #fff;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23000' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 24px center;
+            background-size: 16px;
+        }
+
+        .pill-select:focus {
+            border-color: #000;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .pill-button {
+            padding: 18px 24px;
+            border: none;
+            border-radius: 50px;
+            font-family: var(--font-head);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .pill-button.primary {
+            background: #000;
+            color: #fff;
+        }
+
+        .pill-button.primary:hover {
+            background: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .pill-button.secondary {
+            background: #F5F5F5;
+            color: #000;
+        }
+
+        .pill-button.secondary:hover {
+            background: #EEE;
+        }
+
+        .pill-button.outline {
+            background: transparent;
+            color: #000;
+            border: 2px solid #EEE;
+        }
+
+        .pill-button.outline:hover {
+            border-color: #000;
+        }
+
+        .divider {
+            text-align: center;
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #EEE;
+        }
+
+        .divider span {
+            background: #fff;
+            padding: 0 15px;
+            position: relative;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .social-login {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .social-button {
+            padding: 15px;
+            border: 2px solid #EEE;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            background: #fff;
+        }
+
+        .social-button:hover {
+            border-color: #000;
+            transform: translateY(-2px);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .password-strength {
+            margin-top: 10px;
+        }
+
+        .strength-bar {
+            height: 4px;
+            background: #EEE;
+            border-radius: 2px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .strength-fill.weak {
+            width: 33%;
+            background: #FF4757;
+        }
+
+        .strength-fill.medium {
+            width: 66%;
+            background: #FFA502;
+        }
+
+        .strength-fill.strong {
+            width: 100%;
+            background: #2ED573;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .forgot-link {
+            font-size: 14px;
+            color: #000;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        .terms {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        .profile-photo-upload {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .photo-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #F5F5F5;
+            margin: 0 auto 15px;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #000;
+        }
+
+        .photo-edit {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 8px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        /* Dark mode for new components */
+        .dark-mode .pill-input,
+        .dark-mode .pill-select {
+            background: #111;
+            border-color: #333;
+            color: #fff;
+        }
+
+        .dark-mode .pill-input:focus,
+        .dark-mode .pill-select:focus {
+            border-color: #fff;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+
+        .dark-mode .pill-button.primary {
+            background: #fff;
+            color: #000;
+        }
+
+        .dark-mode .pill-button.primary:hover {
+            background: #ccc;
+        }
+
+        .dark-mode .pill-button.secondary {
+            background: #333;
+            color: #fff;
+        }
+
+        .dark-mode .pill-button.outline {
+            border-color: #333;
+            color: #fff;
+        }
+
+        .dark-mode .pill-button.outline:hover {
+            border-color: #fff;
+        }
+
+        .dark-mode .divider::before {
+            background: #333;
+        }
+
+        .dark-mode .divider span {
+            background: #000;
+            color: #aaa;
+        }
+
+        .dark-mode .social-button {
+            background: #111;
+            border-color: #333;
+            color: #fff;
+        }
+
+        .dark-mode .social-button:hover {
+            border-color: #fff;
+        }
+
+        .dark-mode .forgot-link {
+            color: #fff;
+        }
+
+        .dark-mode .strength-bar {
+            background: #333;
+        }
+
+        .dark-mode .photo-preview {
+            background: #222;
+            border-color: #fff;
+        }
+
+        /* ========== NEW ADDITIONS END HERE ========== */
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- ORIGINAL DAY MODE SCREENS (UNCHANGED) -->
+        <div class="screen">
+            <div class="header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div
+                        style="width: 40px; height: 40px; background: #000; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+                        R</div>
+                    <div>
+                        <div style="font-size: 12px; font-weight: 600; color: #888;">THURSDAY, 24</div>
+                        <div style="font-family: var(--font-head); font-weight: 700; font-size: 18px;">Today's Focus
+                        </div>
+                    </div>
+                </div>
+                <button class="icon-btn"><i class="ri-notification-3-line"></i></button>
+            </div>
+
+            <div class="content">
+                <div style="background: #111; color: #fff; border-radius: 24px; padding: 24px; margin-bottom: 30px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="font-weight: 600;">Daily Goals</span>
+                        <span style="font-family: var(--font-head); font-weight: 700;">60%</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px;">
+                        <div style="height: 100%; width: 60%; background: #fff; border-radius: 10px;"></div>
+                    </div>
+                    <p style="font-size: 12px; margin-top: 15px; opacity: 0.7;">3 of 5 tasks completed</p>
+                </div>
+
+                <h3 style="margin-bottom: 15px; font-size: 18px;">Priority</h3>
+
+                <div class="task-card">
+                    <div class="checkbox"></div>
+                    <div style="flex: 1;">
+                        <h4 style="font-size: 16px;">App Wireframe</h4>
+                        <p class="text-sm">Finish Home screen</p>
+                    </div>
+                    <div
+                        style="background: #F0F0F0; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;">
+                        HIGH</div>
+                </div>
+
+                <div class="task-card">
+                    <div class="checkbox checked"><i class="ri-check-line"></i></div>
+                    <div style="flex: 1; opacity: 0.5;">
+                        <h4 style="font-size: 16px; text-decoration: line-through;">Email Team</h4>
+                        <p class="text-sm">Weekly sync updates</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="bottom-nav">
+                <div class="nav-icon active"><i class="ri-home-fill"></i>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="nav-icon"><i class="ri-calendar-line"></i>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="nav-icon"
+                    style="background: #000; color: #fff; width: 50px; height: 50px; border-radius: 18px; display: flex; justify-content: center; align-items: center; margin-top: -30px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+                    <i class="ri-add-line"></i>
+                </div>
+                <div class="nav-icon"><i class="ri-folder-3-line"></i>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="nav-icon"><i class="ri-user-3-line"></i>
+                    <div class="nav-dot"></div>
+                </div>
+            </div>
+
+            <div class="home-indicator"></div>
+            <div class="screen-name">1. Dashboard w/ Nav</div>
+        </div>
+
+        <div class="screen">
+            <div class="header">
+                <button class="icon-btn" style="border:none;"><i class="ri-close-line"
+                        style="font-size: 24px;"></i></button>
+                <h2 class="title-md">Create</h2>
+                <button class="icon-btn"
+                    style="border:none; background: #000; color: #fff; width: auto; padding: 0 15px; font-size: 14px; font-weight: 600;">Save</button>
+            </div>
+
+            <div class="content">
+                <input type="text" placeholder="Task Name..."
+                    style="width: 100%; font-size: 28px; font-family: var(--font-head); font-weight: 600; border: none; outline: none; padding: 20px 0;">
+
+                <div style="display: flex; gap: 10px; margin-bottom: 25px;">
+                    <span
+                        style="padding: 8px 16px; background: #000; color: #fff; border-radius: 20px; font-size: 12px; font-weight: 600;">Design</span>
+                    <span
+                        style="padding: 8px 16px; border: 1px solid #EEE; border-radius: 20px; font-size: 12px; font-weight: 600;">Personal</span>
+                    <span
+                        style="padding: 8px 16px; border: 1px solid #EEE; border-radius: 20px; font-size: 12px; font-weight: 600;">Dev</span>
+                </div>
+
+                <label style="font-size: 12px; font-weight: 700; color: #999; letter-spacing: 1px;">SCHEDULE</label>
+                <div class="pill-nav-container">
+                    <div class="pill-slider"></div>
+                    <div class="pill-item active">Today</div>
+                    <div class="pill-item">Later</div>
+                    <div class="pill-item">Pick Date</div>
+                </div>
+
+                <label style="font-size: 12px; font-weight: 700; color: #999; letter-spacing: 1px;">NOTES</label>
+                <textarea
+                    style="width: 100%; height: 150px; border: 1px solid #EEE; border-radius: 16px; padding: 15px; margin-top: 10px; font-family: var(--font-body); font-size: 15px; outline: none; resize: none;"
+                    placeholder="Add details..."></textarea>
+
+                <div style="margin-top: 20px; display: flex; gap: 15px;">
+                    <div
+                        style="width: 60px; height: 60px; border: 2px dashed #CCC; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #CCC;">
+                        <i class="ri-attachment-line"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="home-indicator"></div>
+            <div class="screen-name">2. Add Task</div>
+        </div>
+
+        <div class="screen">
+            <div class="header">
+                <button class="icon-btn"><i class="ri-arrow-left-line"></i></button>
+                <button class="icon-btn"><i class="ri-more-2-fill"></i></button>
+            </div>
+
+            <div class="content">
+                <div style="margin-bottom: 20px;">
+                    <span style="font-family: var(--font-head); font-weight: 700; font-size: 12px; color: #999;">DESIGN
+                        PROJECT</span>
+                    <h1 style="font-size: 36px; line-height: 1.1; margin-top: 5px;">App Wireframe</h1>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 30px;">
+                    <span style="font-weight: 600;">Today, 5:00 PM</span>
+                    <div style="width: 1px; height: 15px; background: #CCC; margin: 0 5px;"></div>
+                    <span style="color: #888; font-size: 14px;">High Priority</span>
+                </div>
+
+                <div style="background: #FAFAFA; border-radius: 20px; padding: 20px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 10px;">Description</h4>
+                    <p style="color: #555; line-height: 1.6;">Create low-fidelity wireframes for the Home, Add Task, and
+                        Calendar screens. Focus on the monochrome aesthetic and spacing.</p>
+                </div>
+
+                <h4 style="margin-bottom: 10px;">Sub-tasks (2/3)</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="ri-checkbox-circle-fill" style="font-size: 20px;"></i> <span
+                            style="text-decoration: line-through; color: #999;">Sketch Paper Draft</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="ri-checkbox-circle-fill" style="font-size: 20px;"></i> <span
+                            style="text-decoration: line-through; color: #999;">Define Layout Grid</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="ri-checkbox-blank-circle-line" style="font-size: 20px;"></i> <span>Finalize
+                            Components</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding: 24px;">
+                <button
+                    style="width: 100%; padding: 20px; background: #000; color: #fff; border: none; border-radius: 20px; font-family: var(--font-head); font-size: 16px; font-weight: 600;">Complete
+                    Task</button>
+            </div>
+
+            <div class="home-indicator"></div>
+            <div class="screen-name">3. Task Details</div>
+        </div>
+
+        <div class="screen">
+            <div class="header">
+                <h2 class="title-md">Schedule</h2>
+                <button class="icon-btn"><i class="ri-search-line"></i></button>
+            </div>
+
+            <div class="content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <button class="icon-btn" style="width: 36px; height: 36px;"><i
+                            class="ri-arrow-left-s-line"></i></button>
+                    <span style="font-family: var(--font-head); font-weight: 700; font-size: 18px;">October 2023</span>
+                    <button class="icon-btn" style="width: 36px; height: 36px;"><i
+                            class="ri-arrow-right-s-line"></i></button>
+                </div>
+
+                <div class="calendar-grid">
+                    <div class="day-name">M</div>
+                    <div class="day-name">T</div>
+                    <div class="day-name">W</div>
+                    <div class="day-name">T</div>
+                    <div class="day-name">F</div>
+                    <div class="day-name">S</div>
+                    <div class="day-name">S</div>
+
+                    <div class="date-cell" style="color: #CCC;">28</div>
+                    <div class="date-cell" style="color: #CCC;">29</div>
+                    <div class="date-cell" style="color: #CCC;">30</div>
+                    <div class="date-cell">1</div>
+                    <div class="date-cell has-dot">2</div>
+                    <div class="date-cell">3</div>
+                    <div class="date-cell">4</div>
+                    <div class="date-cell has-dot">5</div>
+                    <div class="date-cell active">6</div>
+                    <div class="date-cell">7</div>
+                    <div class="date-cell has-dot">8</div>
+                    <div class="date-cell">9</div>
+                    <div class="date-cell">10</div>
+                    <div class="date-cell">11</div>
+                </div>
+
+                <div style="height: 1px; background: #F0F0F0; margin: 20px 0;"></div>
+
+                <h4 style="margin-bottom: 15px;">Oct 6th</h4>
+
+                <div class="task-card">
+                    <div style="width: 4px; height: 40px; background: #000; border-radius: 4px; margin-right: 15px;">
+                    </div>
+                    <div>
+                        <h4 style="font-size: 15px;">Design Review</h4>
+                        <p class="text-sm">10:00 AM - 11:30 AM</p>
+                    </div>
+                </div>
+
+                <div class="task-card">
+                    <div style="width: 4px; height: 40px; background: #E0E0E0; border-radius: 4px; margin-right: 15px;">
+                    </div>
+                    <div>
+                        <h4 style="font-size: 15px;">Lunch Break</h4>
+                        <p class="text-sm">1:00 PM</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="bottom-nav">
+                <div class="nav-icon"><i class="ri-home-line"></i>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="nav-icon active"><i class="ri-calendar-fill"></i>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="nav-icon"
+                    style="background: #000; color: #fff; width: 50px; height: 50px; border-radius: 18px; display: flex; justify-content: center; align-items: center; margin-top: -30px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+                    <i class="ri-add-line"></i>
+                </div>
+                <div class="nav-icon"><i class="ri-folder-3-line"></i>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="nav-icon"><i class="ri-user-3-line"></i>
+                    <div class="nav-dot"></div>
+                </div>
+            </div>
+
+            <div class="home-indicator"></div>
+            <div class="screen-name">4. Calendar View</div>
+        </div>
+
+        <div class="screen">
+            <div class="header"
+                style="justify-content: center; flex-direction: column; padding-bottom: 30px; border-bottom: 1px solid #F0F0F0;">
+                <div
+                    style="width: 100px; height: 100px; background: #F0F0F0; border-radius: 50%; border: 3px solid #000; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; font-size: 40px; margin-top: 20px;">
+                    👾
+                </div>
+                <h2 style="font-size: 24px;">Arpit Pandey</h2>
+                <p class="text-sm">Product Designer</p>
+                <button
+                    style="margin-top: 15px; padding: 8px 16px; border: 1px solid #CCC; background: transparent; border-radius: 20px; font-size: 12px; font-weight: 600;">Edit
+                    Profile</button>
+            </div>
+
+            <div class="content" style="padding-top: 30px;">
+                <div class="stat-row">
+                    <div class="stat-card">
+                        <div class="stat-num">142</div>
+                        <div class="stat-label">Done</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num">12</div>
+                        <div class="stat-label">Pending</div>
+                    </div>
+                </div>
+
+                <h4 style="margin-bottom: 10px;">Settings</h4>
+
+                <div class="setting-item">
+                    <div class="setting-label"><i class="ri-moon-line"></i> Dark Mode</div>
+                    <div class="toggle-switch"></div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label"><i class="ri-notification-3-line"></i> Notifications</div>
+                    <div class="toggle-switch on"></div>
+                </div>
+
+
+                <div class="setting-item" style="border: none;">
+                    <div class="setting-label" style="color: red;"><i class="ri-logout-box-r-line"></i> Log Out</div>
+                </div>
+
+            </div>
+
+            <div class="bottom-nav">
+                <div class="nav-icon"><i class="ri-home-line"></i>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="nav-icon"><i class="ri-calendar-line"></i>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="nav-icon"
+                    style="background: #000; color: #fff; width: 50px; height: 50px; border-radius: 18px; display: flex; justify-content: center; align-items: center; margin-top: -30px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+                    <i class="ri-add-line"></i>
+                </div>
+                <div class="nav-icon"><i class="ri-folder-3-line"></i>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="nav-icon active"><i class="ri-user-3-fill"></i>
+                    <div class="nav-dot"></div>
+                </div>
+            </div>
+
+            <div class="home-indicator"></div>
+            <div class="screen-name">5. Profile & Settings</div>
+        </div>
+
+        <!-- ========== NEW SCREENS START HERE ========== -->
+
+        <!-- NIGHT MODE VERSION OF SCREEN 1 -->
+        <div class="screen dark-mode">
+            <div class="header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div
+                        style="width: 40px; height: 40px; background: #fff; border-radius: 50%; color: #000; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+                        R</div>
+                    <div>
+                        <div style="font-size: 12px; font-weight: 600; color: #aaa;">THURSDAY, 24</div>
+                        <div style="font-family: var(--font-head); font-weight: 700; font-size: 18px; color: #fff;">
+                            Today's Focus</div>
+                    </div>
+                </div>
+                <button class="icon-btn"><i class="ri-notification-3-line"></i></button>
+            </div>
+
+            <div class="content">
+                <div style="background: #222; color: #fff; border-radius: 24px; padding: 24px; margin-bottom: 30px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="font-weight: 600; color: #fff;">Daily Goals</span>
+                        <span style="font-family: var(--font-head); font-weight: 700; color: #fff;">60%</span>
+                    </div>
+                    <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                        <div style="height: 100%; width: 60%; background: #fff; border-radius: 10px;"></div>
+                    </div>
+                    <p style="font-size: 12px; margin-top: 15px; opacity: 0.7; color: #aaa;">3 of 5 tasks completed</p>
+                </div>
+
+                <h3 style="margin-bottom: 15px; font-size: 18px; color: #fff;">Priority</h3>
+
+                <div class="task-card">
+                    <div class="checkbox"></div>
+                    <div style="flex: 1;">
+                        <h4 style="font-size: 16px; color: #fff;">App Wireframe</h4>
+                        <p style="font-size: 14px; color: #aaa;">Finish Home screen</p>
+                    </div>
+                    <div
+                        style="background: #333; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; color: #fff;">
+                        HIGH</div>
+                </div>
+
+                <div class="task-card">
+                    <div class="checkbox checked"><i class="ri-check-line"></i></div>
+                    <div style="flex: 1; opacity: 0.5;">
+                        <h4 style="font-size: 16px; text-decoration: line-through; color: #aaa;">Email Team</h4>
+                        <p style="font-size: 14px; color: #aaa;">Weekly sync updates</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="bottom-nav">
+                <div class="nav-icon active"><i class="ri-home-fill"></i>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="nav-icon"><i class="ri-calendar-line"></i>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="nav-icon"
+                    style="background: #fff; color: #000; width: 50px; height: 50px; border-radius: 18px; display: flex; justify-content: center; align-items: center; margin-top: -30px; box-shadow: 0 10px 20px rgba(255,255,255,0.1);">
+                    <i class="ri-add-line"></i>
+                </div>
+                <div class="nav-icon"><i class="ri-folder-3-line"></i>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="nav-icon"><i class="ri-user-3-line"></i>
+                    <div class="nav-dot"></div>
+                </div>
+            </div>
+
+            <div class="home-indicator"></div>
+            <div class="screen-name">6. Dashboard (Night Mode)</div>
+        </div>
+
+        <!-- NIGHT MODE VERSION OF SCREEN 2 -->
+        <div class="screen dark-mode">
+            <div class="header">
+                <button class="icon-btn" style="border:none;"><i class="ri-close-line"
+                        style="font-size: 24px;"></i></button>
+                <h2 class="title-md" style="color: #fff;">Create</h2>
+                <button class="icon-btn"
+                    style="border:none; background: #fff; color: #000; width: auto; padding: 0 15px; font-size: 14px; font-weight: 600;">Save</button>
+            </div>
+
+            <div class="content">
+                <input type="text" placeholder="Task Name..."
+                    style="width: 100%; font-size: 28px; font-family: var(--font-head); font-weight: 600; border: none; outline: none; padding: 20px 0; background: transparent; color: #fff;">
+
+                <div style="display: flex; gap: 10px; margin-bottom: 25px;">
+                    <span
+                        style="padding: 8px 16px; background: #fff; color: #000; border-radius: 20px; font-size: 12px; font-weight: 600;">Design</span>
+                    <span
+                        style="padding: 8px 16px; border: 1px solid #333; border-radius: 20px; font-size: 12px; font-weight: 600; color: #fff;">Personal</span>
+                    <span
+                        style="padding: 8px 16px; border: 1px solid #333; border-radius: 20px; font-size: 12px; font-weight: 600; color: #fff;">Dev</span>
+                </div>
+
+                <label style="font-size: 12px; font-weight: 700; color: #aaa; letter-spacing: 1px;">SCHEDULE</label>
+                <div class="pill-nav-container">
+                    <div class="pill-slider"></div>
+                    <div class="pill-item active">Today</div>
+                    <div class="pill-item">Later</div>
+                    <div class="pill-item">Pick Date</div>
+                </div>
+
+                <label style="font-size: 12px; font-weight: 700; color: #aaa; letter-spacing: 1px;">NOTES</label>
+                <textarea
+                    style="width: 100%; height: 150px; border: 1px solid #333; border-radius: 16px; padding: 15px; margin-top: 10px; font-family: var(--font-body); font-size: 15px; outline: none; resize: none; background: #111; color: #fff;"
+                    placeholder="Add details..."></textarea>
+
+                <div style="margin-top: 20px; display: flex; gap: 15px;">
+                    <div
+                        style="width: 60px; height: 60px; border: 2px dashed #333; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #333;">
+                        <i class="ri-attachment-line"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="home-indicator"></div>
+            <div class="screen-name">7. Add Task (Night Mode)</div>
+        </div>
+
+        <!-- NIGHT MODE VERSION OF SCREEN 3 -->
+        <div class="screen dark-mode">
+            <div class="header">
+                <button class="icon-btn"><i class="ri-arrow-left-line"></i></button>
+                <button class="icon-btn"><i class="ri-more-2-fill"></i></button>
+            </div>
+
+            <div class="content">
+                <div style="margin-bottom: 20px;">
+                    <span style="font-family: var(--font-head); font-weight: 700; font-size: 12px; color: #aaa;">DESIGN
+                        PROJECT</span>
+                    <h1 style="font-size: 36px; line-height: 1.1; margin-top: 5px; color: #fff;">App Wireframe</h1>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 30px;">
+                    <span style="font-weight: 600; color: #fff;">Today, 5:00 PM</span>
+                    <div style="width: 1px; height: 15px; background: #333; margin: 0 5px;"></div>
+                    <span style="color: #aaa; font-size: 14px;">High Priority</span>
+                </div>
+
+                <div style="background: #111; border-radius: 20px; padding: 20px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 10px; color: #fff;">Description</h4>
+                    <p style="color: #aaa; line-height: 1.6;">Create low-fidelity wireframes for the Home, Add Task, and
+                        Calendar screens. Focus on the monochrome aesthetic and spacing.</p>
+                </div>
+
+                <h4 style="margin-bottom: 10px; color: #fff;">Sub-tasks (2/3)</h4>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="ri-checkbox-circle-fill" style="font-size: 20px; color: #fff;"></i> <span
+                            style="text-decoration: line-through; color: #aaa;">Sketch Paper Draft</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="ri-checkbox-circle-fill" style="font-size: 20px; color: #fff;"></i> <span
+                            style="text-decoration: line-through; color: #aaa;">Define Layout Grid</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="ri-checkbox-blank-circle-line" style="font-size: 20px; color: #fff;"></i> <span
+                            style="color: #fff;">Finalize Components</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="padding: 24px;">
+                <button
+                    style="width: 100%; padding: 20px; background: #fff; color: #000; border: none; border-radius: 20px; font-family: var(--font-head); font-size: 16px; font-weight: 600;">Complete
+                    Task</button>
+            </div>
+
+            <div class="home-indicator"></div>
+            <div class="screen-name">8. Task Details (Night Mode)</div>
+        </div>
+
+        <!-- NIGHT MODE VERSION OF SCREEN 4 -->
+        <div class="screen dark-mode">
+            <div class="header">
+                <h2 class="title-md" style="color: #fff;">Schedule</h2>
+                <button class="icon-btn"><i class="ri-search-line"></i></button>
+            </div>
+
+            <div class="content">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <button class="icon-btn" style="width: 36px; height: 36px;"><i
+                            class="ri-arrow-left-s-line"></i></button>
+                    <span style="font-family: var(--font-head); font-weight: 700; font-size: 18px; color: #fff;">October
+                        2023</span>
+                    <button class="icon-btn" style="width: 36px; height: 36px;"><i
+                            class="ri-arrow-right-s-line"></i></button>
+                </div>
+
+                <div class="calendar-grid">
+                    <div class="day-name" style="color: #666;">M</div>
+                    <div class="day-name" style="color: #666;">T</div>
+                    <div class="day-name" style="color: #666;">W</div>
+                    <div class="day-name" style="color: #666;">T</div>
+                    <div class="day-name" style="color: #666;">F</div>
+                    <div class="day-name" style="color: #666;">S</div>
+                    <div class="day-name" style="color: #666;">S</div>
+
+                    <div class="date-cell" style="color: #666;">28</div>
+                    <div class="date-cell" style="color: #666;">29</div>
+                    <div class="date-cell" style="color: #666;">30</div>
+                    <div class="date-cell" style="color: #fff;">1</div>
+                    <div class="date-cell has-dot" style="color: #fff;">2</div>
+                    <div class="date-cell" style="color: #fff;">3</div>
+                    <div class="date-cell" style="color: #fff;">4</div>
+                    <div class="date-cell has-dot" style="color: #fff;">5</div>
+                    <div class="date-cell active" style="color: #000;">6</div>
+                    <div class="date-cell" style="color: #fff;">7</div>
+                    <div class="date-cell has-dot" style="color: #fff;">8</div>
+                    <div class="date-cell" style="color: #fff;">9</div>
+                    <div class="date-cell" style="color: #fff;">10</div>
+                    <div class="date-cell" style="color: #fff;">11</div>
+                </div>
+
+                <div style="height: 1px; background: #333; margin: 20px 0;"></div>
+
+                <h4 style="margin-bottom: 15px; color: #fff;">Oct 6th</h4>
+
+                <div class="task-card">
+                    <div style="width: 4px; height: 40px; background: #fff; border-radius: 4px; margin-right: 15px;">
+                    </div>
+                    <div>
+                        <h4 style="font-size: 15px; color: #fff;">Design Review</h4>
+                        <p style="font-size: 14px; color: #aaa;">10:00 AM - 11:30 AM</p>
+                    </div>
+                </div>
+
+                <div class="task-card">
+                    <div style="width: 4px; height: 40px; background: #333; border-radius: 4px; margin-right: 15px;">
+                    </div>
+                    <div>
+                        <h4 style="font-size: 15px; color: #fff;">Lunch Break</h4>
+                        <p style="font-size: 14px; color: #aaa;">1:00 PM</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="bottom-nav">
+                <div class="nav-icon"><i class="ri-home-line"></i>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="nav-icon active"><i class="ri-calendar-fill"></i>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="nav-icon"
+                    style="background: #fff; color: #000; width: 50px; height: 50px; border-radius: 18px; display: flex; justify-content: center; align-items: center; margin-top: -30px; box-shadow: 0 10px 20px rgba(255,255,255,0.1);">
+                    <i class="ri-add-line"></i>
+                </div>
+                <div class="nav-icon"><i class="ri-folder-3-line"></i>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="nav-icon"><i class="ri-user-3-line"></i>
+                    <div class="nav-dot"></div>
+                </div>
+            </div>
+
+            <div class="home-indicator"></div>
+            <div class="screen-name">9. Calendar View (Night Mode)</div>
+        </div>
+
+        <!-- NIGHT MODE VERSION OF SCREEN 5 -->
+        <div class="screen dark-mode">
+            <div class="header"
+                style="justify-content: center; flex-direction: column; padding-bottom: 30px; border-bottom: 1px solid #333;">
+                <div
+                    style="width: 100px; height: 100px; background: #222; border-radius: 50%; border: 3px solid #fff; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; font-size: 40px; margin-top: 20px;">
+                    👾
+                </div>
+                <h2 style="font-size: 24px; color: #fff;">Arpit Pandey</h2>
+                <p style="font-size: 14px; color: #aaa;">Product Designer</p>
+                <button
+                    style="margin-top: 15px; padding: 8px 16px; border: 1px solid #333; background: transparent; border-radius: 20px; font-size: 12px; font-weight: 600; color: #fff;">Edit
+                    Profile</button>
+            </div>
+
+            <div class="content" style="padding-top: 30px;">
+                <div class="stat-row">
+                    <div class="stat-card">
+                        <div class="stat-num" style="color: #fff;">142</div>
+                        <div class="stat-label" style="color: #aaa;">Done</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num" style="color: #fff;">12</div>
+                        <div class="stat-label" style="color: #aaa;">Pending</div>
+                    </div>
+                </div>
+
+                <h4 style="margin-bottom: 10px; color: #fff;">Settings</h4>
+
+                <div class="setting-item">
+                    <div class="setting-label" style="color: #fff;"><i class="ri-moon-line"></i> Dark Mode</div>
+                    <div class="toggle-switch"></div>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-label" style="color: #fff;"><i class="ri-notification-3-line"></i> Notifications
+                    </div>
+                    <div class="toggle-switch on"></div>
+                </div>
+
+
+                <div class="setting-item" style="border: none;">
+                    <div class="setting-label" style="color: #ff6b6b;"><i class="ri-logout-box-r-line"></i> Log Out
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="bottom-nav">
+                <div class="nav-icon"><i class="ri-home-line"></i>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="nav-icon"><i class="ri-calendar-line"></i>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="nav-icon"
+                    style="background: #fff; color: #000; width: 50px; height: 50px; border-radius: 18px; display: flex; justify-content: center; align-items: center; margin-top: -30px; box-shadow: 0 10px 20px rgba(255,255,255,0.1);">
+                    <i class="ri-add-line"></i>
+                </div>
+                <div class="nav-icon"><i class="ri-folder-3-line"></i>
+                    <div class="nav-dot"></div>
+                </div>
+                <div class="nav-icon active"><i class="ri-user-3-fill"></i>
+                    <div class="nav-dot"></div>
+                </div>
+            </div>
+
+            <div class="home-indicator"></div>
+            <div class="screen-name">10. Profile & Settings (Night Mode)</div>
+        </div>
+
+        <!-- PILL-SHAPED LOGIN PAGE -->
+        <div class="screen">
+            <div class="header">
+                <button class="icon-btn"><i class="ri-arrow-left-line"></i></button>
+                <h2 class="title-md">Welcome Back</h2>
+                <div style="width: 44px;"></div>
+            </div>
+
+            <div class="pill-form-container">
+                <form class="pill-form">
+                    <input type="email" class="pill-input" placeholder="Email Address" required>
+
+                    <input type="password" class="pill-input" placeholder="Password" required>
+
+                    <div class="password-strength">
+                        <div class="strength-bar">
+                            <div class="strength-fill medium"></div>
+                        </div>
+                    </div>
+
+                    <div class="remember-forgot">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember" style="width: 18px; height: 18px;">
+                            <label for="remember">Remember me</label>
+                        </div>
+                        <a href="#" class="forgot-link">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" class="pill-button primary">Sign In</button>
+
+                    <div class="divider">
+                        <span>Or continue with</span>
+                    </div>
+
+                    <div class="social-login">
+                        <div class="social-button">
+                            <i class="ri-google-fill"></i>
+                        </div>
+                        <div class="social-button">
+                            <i class="ri-facebook-fill"></i>
+                        </div>
+                        <div class="social-button">
+                            <i class="ri-apple-fill"></i>
+                        </div>
+                    </div>
+
+                    <p style="text-align: center; font-size: 14px; color: #666; margin-top: 20px;">
+                        Don't have an account? <a href="#" style="color: #000; font-weight: 600;">Sign Up</a>
+                    </p>
+                </form>
+            </div>
+
+            <div class="home-indicator"></div>
+            <div class="screen-name">11. Login (Pill Design)</div>
+        </div>
+
+        <!-- PILL-SHAPED SIGNUP PAGE -->
+        <div class="screen">
+            <div class="header">
+                <button class="icon-btn"><i class="ri-arrow-left-line"></i></button>
+                <h2 class="title-md">Create Account</h2>
+                <div style="width: 44px;"></div>
+            </div>
+
+            <div class="pill-form-container">
+                <form class="pill-form">
+                    <div class="form-row">
+                        <input type="text" class="pill-input" placeholder="First Name" required>
+                        <input type="text" class="pill-input" placeholder="Last Name" required>
+                    </div>
+
+                    <input type="email" class="pill-input" placeholder="Email Address" required>
+
+                    <input type="password" class="pill-input" placeholder="Password" required>
+
+                    <div class="password-strength">
+                        <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Password strength</div>
+                        <div class="strength-bar">
+                            <div class="strength-fill strong"></div>
+                        </div>
+                    </div>
+
+                    <div class="terms">
+                        <input type="checkbox" id="terms" style="width: 18px; height: 18px;" required>
+                        <label for="terms">I agree to the Terms of Service and Privacy Policy</label>
+                    </div>
+
+                    <button type="submit" class="pill-button primary">Create Account</button>
+
+                    <div class="divider">
+                        <span>Or sign up with</span>
+                    </div>
+
+                    <div class="social-login">
+                        <div class="social-button">
+                            <i class="ri-google-fill"></i>
+                        </div>
+                        <div class="social-button">
+                            <i class="ri-facebook-fill"></i>
+                        </div>
+                        <div class="social-button">
+                            <i class="ri-apple-fill"></i>
+                        </div>
+                    </div>
+
+                    <p style="text-align: center; font-size: 14px; color: #666; margin-top: 20px;">
+                        Already have an account? <a href="#" style="color: #000; font-weight: 600;">Sign In</a>
+                    </p>
+                </form>
+            </div>
+
+            <div class="home-indicator"></div>
+            <div class="screen-name">12. Sign Up (Pill Design)</div>
+        </div>
+
+        <!-- PROFILE EDIT PAGE -->
+        <div class="screen">
+            <div class="header">
+                <button class="icon-btn"><i class="ri-close-line"></i></button>
+                <h2 class="title-md">Edit Profile</h2>
+                <button class="icon-btn"
+                    style="border:none; background: #000; color: #fff; width: auto; padding: 0 15px; font-size: 14px; font-weight: 600;">Save</button>
+            </div>
+
+            <div class="content">
+                <div class="profile-photo-upload">
+                    <div class="photo-preview">
+                        <div
+                            style="font-size: 40px; display: flex; align-items: center; justify-content: center; height: 100%;">
+                            👤</div>
+                        <div class="photo-edit">
+                            <i class="ri-camera-line"></i> Change Photo
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pill-form">
+                    <input type="text" class="pill-input" placeholder="Full Name" value="Arpit Pandey">
+
+                    <input type="email" class="pill-input" placeholder="Email" value="arpit@example.com">
+
+                    <input type="tel" class="pill-input" placeholder="Phone Number" value="+1 234 567 8900">
+
+                    <select class="pill-select">
+                        <option>Product Designer</option>
+                        <option>UX Designer</option>
+                        <option>UI Designer</option>
+                        <option>Frontend Developer</option>
+                        <option>Product Manager</option>
+                    </select>
+
+                    <textarea class="pill-input" placeholder="Bio"
+                        style="height: 100px; border-radius: 20px; padding: 20px; resize: none;">Passionate about creating beautiful and functional interfaces. Love working with monochrome designs.</textarea>
+
+                    <div style="margin: 20px 0;">
+                        <label style="font-size: 12px; font-weight: 700; color: #999; letter-spacing: 1px;">NOTIFICATION
+                            SETTINGS</label>
+                        <div class="setting-item" style="border: none; padding: 15px 0;">
+                            <div class="setting-label">Email Notifications</div>
+                            <div class="toggle-switch on"></div>
+                        </div>
+                        <div class="setting-item" style="border: none; padding: 15px 0;">
+                            <div class="setting-label">Push Notifications</div>
+                            <div class="toggle-switch"></div>
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="pill-button outline">Cancel</button>
+                        <button type="submit" class="pill-button primary">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="home-indicator"></div>
+            <div class="screen-name">13. Profile Edit</div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

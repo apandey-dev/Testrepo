@@ -41,8 +41,11 @@
 
     --button-primary: #fff;
     --button-primary-text: #000;
+    --button-primary-hover: #e0e0e0;
+
     --button-secondary: #1a1a1a;
     --button-secondary-text: #ccc;
+    --button-secondary-hover: #2a2a2a;
     --button-danger: #380a0a;
     --button-danger-text: #ff6b6b;
 
@@ -107,8 +110,11 @@ body[data-theme="light"] {
 
     --button-primary: #000;
     --button-primary-text: #fff;
+    --button-primary-hover: #333;
+
     --button-secondary: #e5e5e5;
     --button-secondary-text: #333;
+    --button-secondary-hover: #d4d4d4;
     --button-danger: #fee2e2;
     --button-danger-text: #dc2626;
 
@@ -917,8 +923,9 @@ html {
 }
 
 .action-btn-sidebar.pin:hover {
-    background: rgba(251, 191, 36, 0.1);
+    background: rgba(251, 191, 36, 0.2);
     border-color: var(--accent-warning);
+    color: var(--accent-warning);
 }
 
 .action-btn-sidebar.export {
@@ -1464,7 +1471,7 @@ html {
 }
 
 .btn-primary:hover {
-    background: var(--button-secondary);
+    background: var(--button-primary-hover);
     transform: translateY(-1px);
 }
 
@@ -1477,7 +1484,7 @@ html {
 .btn-secondary:hover {
     color: var(--text-primary);
     border-color: var(--border-tertiary);
-    background: var(--bg-tertiary);
+    background: var(--button-secondary-hover);
 }
 
 .btn-danger {
@@ -1644,18 +1651,6 @@ html {
     background: var(--border-primary);
     transition: .4s;
     border-radius: 28px;
-}
-
-.toggle-switch .slider:before {
-    position: absolute;
-    content: "";
-    height: 22px;
-    width: 22px;
-    left: 3px;
-    bottom: 3px;
-    background: var(--text-tertiary);
-    transition: .4s;
-    border-radius: 50%;
 }
 
 .toggle-switch input:checked+.slider {
@@ -2160,7 +2155,7 @@ input:checked+.slider:before {
 
 .pin-filter-btn.active {
     background: var(--accent-warning);
-    color: #1f2937;
+    color: var(--button-primary-text);
     border-color: var(--accent-warning);
 }
 

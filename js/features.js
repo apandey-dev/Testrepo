@@ -500,6 +500,9 @@ const UI = {
     },
 
     toggleMenu: function (type) {
+        // Ensure elements are cached
+        if (!this.els.fontBox || !this.els.colorBox) this.cacheElements();
+
         let target, btnId;
         if (type === 'font') { target = this.els.fontBox; btnId = 'btn-font'; }
         else if (type === 'color') { target = this.els.colorBox; btnId = 'btn-color'; }
@@ -641,10 +644,14 @@ const UI = {
                             <div class="share-label">Public Access</div>
                             <div class="share-sub">Anyone with the link can view</div>
                         </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="share-toggle" ${isPublic ? 'checked' : ''} onchange="Logic.toggleShare(this.checked)">
-                            <span class="slider"></span>
-                        </label>
+                        <div class="share-toggle-wrapper">
+                            <input type="checkbox" id="share-toggle" class="segment-input" ${isPublic ? 'checked' : ''} onchange="Logic.toggleShare(this.checked)">
+                            <label for="share-toggle" class="segment-label">
+                                <span class="segment-text option-private">Private</span>
+                                <span class="segment-text option-public">Public</span>
+                                <span class="segment-pill"></span>
+                            </label>
+                        </div>
                     </div>
                     <div class="link-box ${isPublic ? 'active' : ''}" id="share-link-box">
                         <input type="text" class="link-input" value="${link}" readonly>
@@ -2444,3 +2451,8 @@ function setupListeners() {
 window.UI = UI;
 window.Logic = Logic;
 window.SettingsUI = SettingsUI;
+
+// Initialize Settings on Load
+document.addEventListener('DOMContentLoaded', () => {
+    SettingsUI.init();
+});

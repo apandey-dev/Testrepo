@@ -127,67 +127,88 @@ pre.code-block code {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #1a1a1a;
+    background: var(--bg-tertiary);
     padding: 15px 10px;
     border-radius: 12px;
-    border: 1px solid #333;
+    border: 1px solid var(--border-primary);
     margin-bottom: 20px;
 }
 
 .share-label {
-    color: #fff;
+    color: var(--text-primary);
     font-weight: 600;
     font-size: 15px;
 }
 
 .share-sub {
-    color: #888;
+    color: var(--text-muted);
     font-size: 12px;
     margin-top: 2px;
 }
 
-/* Toggle Switch */
-.toggle-switch {
+/* --- PREMIUM PILL SEGMENTED CONTROL --- */
+.share-toggle-wrapper {
     position: relative;
-    width: 50px;
-    height: 26px;
+    width: 140px;
+}
+
+.segment-input {
+    display: none;
+}
+
+.segment-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-input);
+    border: 1px solid var(--border-primary);
+    border-radius: 50px;
+    /* Full pill shape */
+    padding: 4px;
+    position: relative;
     cursor: pointer;
+    user-select: none;
+    height: 36px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.toggle-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+.segment-text {
+    z-index: 2;
+    flex: 1;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: color 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    line-height: 1;
 }
 
-.slider {
+.segment-pill {
     position: absolute;
-    inset: 0;
-    background-color: #333;
-    transition: .4s;
-    border-radius: 34px;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
+    top: 4px;
     left: 4px;
-    bottom: 4px;
-    background-color: #888;
-    transition: .4s;
-    border-radius: 50%;
+    width: calc(50% - 4px);
+    height: calc(100% - 8px);
+    background: var(--bg-tertiary);
+    border-radius: 40px;
+    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1), background 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 1;
 }
 
-input:checked+.slider {
-    background-color: #22d3ee;
-    /* Cyan brand color */
+/* States */
+.segment-input:not(:checked)~.segment-label .option-private {
+    color: var(--text-primary);
 }
 
-input:checked+.slider:before {
-    transform: translateX(24px);
-    background-color: #fff;
+.segment-input:checked~.segment-label .option-public {
+    color: #fff;
+}
+
+.segment-input:checked~.segment-label .segment-pill {
+    transform: translateX(100%) translateX(0px);
+    /* Move to right half */
+    background: var(--accent-secondary);
 }
 
 /* Link Box */
@@ -206,9 +227,9 @@ input:checked+.slider:before {
 
 .link-input {
     flex: 1;
-    background: #000;
-    border: 1px solid #333;
-    color: #888;
+    background: var(--bg-input);
+    border: 1px solid var(--border-primary);
+    color: var(--text-secondary);
     padding: 10px;
     border-radius: 8px;
     font-family: monospace;
@@ -219,15 +240,16 @@ input:checked+.slider:before {
 #btn-copy {
     width: auto;
     padding: 0 15px;
-    background: #222;
-    color: #fff;
-    border: 1px solid #333;
+    background: var(--button-secondary);
+    color: var(--button-secondary-text);
+    border: 1px solid var(--border-primary);
     border-radius: 8px;
     cursor: pointer;
 }
 
 #btn-copy:hover {
-    background: #333;
+    background: var(--button-secondary-hover);
+    color: var(--text-primary);
 }
 
 /* Export Modal Styles */
@@ -243,10 +265,10 @@ input:checked+.slider:before {
     align-items: center;
     gap: 15px;
     padding: 16px;
-    background: #111;
-    border: 1px solid #333;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
     border-radius: 12px;
-    color: #fff;
+    color: var(--text-primary);
     cursor: pointer;
     transition: all 0.2s;
     text-align: left;
@@ -255,29 +277,29 @@ input:checked+.slider:before {
 
 .export-option-btn i {
     font-size: 32px;
-    color: #888;
+    color: var(--text-muted);
 }
 
 .export-option-btn:hover {
-    background: #1a1a1a;
-    border-color: #555;
+    background: var(--button-secondary-hover);
+    border-color: var(--border-tertiary);
     transform: translateY(-2px);
 }
 
 .export-option-btn:hover i {
-    color: #fff;
+    color: var(--text-primary);
 }
 
 .export-title {
     font-size: 15px;
     font-weight: 600;
-    color: #fff;
+    color: var(--text-primary);
     margin-bottom: 4px;
 }
 
 .export-desc {
     font-size: 12px;
-    color: #888;
+    color: var(--text-muted);
 }
 
 /* Custom Dividers */
@@ -465,4 +487,58 @@ body.pinned-view .chip-empty:hover {
     height: 1px;
     background: #333;
     margin: 4px 0;
+}
+
+/* --- ANIMATIONS --- */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.ph-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* --- FLOATING MENU (Font Picker) & CONTEXT MENU --- */
+.floating-menu,
+.chip-context-menu {
+    background: var(--bg-tertiary) !important;
+    border: 1px solid var(--border-primary) !important;
+    box-shadow: 0 8px 24px var(--shadow-color) !important;
+    border-radius: 12px !important;
+    padding: 6px !important;
+    overflow: hidden;
+    animation: menuFadeIn 0.2s ease-out;
+}
+
+.menu-item,
+.context-menu-item {
+    color: var(--text-primary) !important;
+    padding: 8px 12px !important;
+    border-radius: 8px !important;
+    transition: all 0.2s;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.menu-item:hover,
+.context-menu-item:hover {
+    background: var(--bg-chip-hover) !important;
+    color: var(--accent-primary) !important;
+}
+
+@keyframes menuFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
