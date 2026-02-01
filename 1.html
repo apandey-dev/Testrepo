@@ -1,739 +1,504 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monochrome Pro UI Kit</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-
+    <title>Vertical Business Card Generator</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Playpen+Sans:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --bg-presentation: #E0E0E0;
-            --screen-bg: #FFFFFF;
-            --text-primary: #111111;
-            --text-secondary: #757575;
-
-            /* Font Variables */
-            --font-head: 'Fredoka', sans-serif;
-            --font-body: 'Playpen Sans', cursive;
+            --primary-blue: #548CFF; /* Soft Blue from image */
+            --dark-blue: #3a6bc0;
+            --text-dark: #333;
+            --white: #ffffff;
+            --card-width: 320px; /* On screen size */
+            --card-height: 560px; /* Aspect ratio roughly 2:3.5 */
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background-color: var(--bg-presentation);
-            font-family: var(--font-body);
+            font-family: 'Fredoka', sans-serif;
+            background-color: #f4f7f6;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            /* Top align for scrolling */
             min-height: 100vh;
-            padding: 60px;
-            overflow-x: auto;
-            /* Allow horizontal scroll if screens are many */
+            color: var(--text-dark);
         }
 
+        /* --- Layout --- */
         .container {
             display: flex;
-            gap: 50px;
-            flex-wrap: wrap;
-            justify-content: center;
             width: 100%;
-            max-width: 1800px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+            gap: 50px;
+            align-items: flex-start;
         }
 
-        /* --- MOBILE SCREEN FRAME --- */
-        .screen {
-            width: 360px;
-            height: 760px;
-            background-color: var(--screen-bg);
-            border-radius: 40px;
-            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.25);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-            border: 10px solid #111;
-            flex-shrink: 0;
-            /* Prevent shrinking */
-        }
-
-        .home-indicator {
-            position: absolute;
-            bottom: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 5px;
-            background-color: #000;
-            border-radius: 10px;
-            opacity: 0.2;
-            z-index: 10;
-        }
-
-        /* --- TYPOGRAPHY --- */
-        h1,
-        h2,
-        h3,
-        h4 {
-            font-family: var(--font-head);
-            color: var(--text-primary);
-        }
-
-        .title-lg {
-            font-size: 28px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-        }
-
-        .title-md {
-            font-size: 22px;
-            font-weight: 600;
-        }
-
-        .text-sm {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        /* --- COMMON COMPONENTS --- */
-        .header {
-            padding: 30px 24px 15px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #fff;
-            z-index: 5;
-        }
-
-        .icon-btn {
-            background: transparent;
-            border: 1px solid #EAEAEA;
-            width: 44px;
-            height: 44px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            cursor: pointer;
-            transition: 0.2s;
-            color: #000;
-        }
-
-        .icon-btn:hover {
-            background: #F5F5F5;
-            border-color: #000;
-        }
-
-        .content {
-            padding: 10px 24px 24px 24px;
+        /* --- Form Section --- */
+        .editor-panel {
             flex: 1;
-            overflow-y: auto;
-            /* Hide Scrollbar */
-            scrollbar-width: none;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
-        .content::-webkit-scrollbar {
-            display: none;
-        }
+        .editor-panel h2 { margin-bottom: 20px; color: var(--primary-blue); }
 
-        /* Bottom Nav (New!) */
-        .bottom-nav {
-            height: 80px;
-            border-top: 1px solid #F0F0F0;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding-bottom: 10px;
-            background: #fff;
-        }
-
-        .nav-icon {
-            font-size: 24px;
-            color: #CCC;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-        }
-
-        .nav-icon.active {
-            color: #000;
-        }
-
-        .nav-dot {
-            width: 5px;
-            height: 5px;
-            background: #000;
-            border-radius: 50%;
-            opacity: 0;
-        }
-
-        .nav-icon.active .nav-dot {
-            opacity: 1;
-        }
-
-        /* --- WIDGETS --- */
-
-        /* 1. Task Card */
-        .task-card {
-            display: flex;
-            align-items: center;
-            padding: 16px;
-            margin-bottom: 12px;
-            border: 1px solid #EEE;
-            border-radius: 20px;
-            background: #fff;
-            transition: 0.2s;
-        }
-
-        .task-card:hover {
-            border-color: #000;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
-        .checkbox {
-            width: 24px;
-            height: 24px;
-            border: 2px solid #000;
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #eee;
             border-radius: 8px;
-            margin-right: 15px;
+            font-family: 'Kalam', cursive;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus { border-color: var(--primary-blue); outline: none; }
+
+        .actions { display: flex; gap: 10px; margin-top: 20px; }
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Fredoka', sans-serif;
+            transition: transform 0.2s, background 0.2s;
+            flex: 1;
+        }
+        .btn-primary { background: var(--primary-blue); color: white; }
+        .btn-secondary { background: #333; color: white; }
+        .btn:hover { transform: translateY(-2px); opacity: 0.9; }
+
+        /* --- Card Preview Section --- */
+        .preview-panel {
+            flex: 1;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            perspective: 1200px; /* For 3D Flip */
         }
 
-        .checkbox.checked {
-            background: #000;
-        }
-
-        .checkbox.checked i {
-            color: #fff;
-            font-size: 14px;
-        }
-
-        /* 2. Pill Nav (Reused) */
-        .pill-nav-container {
-            background: #F4F4F4;
-            border-radius: 50px;
-            padding: 5px;
-            display: flex;
+        .card-wrapper {
+            width: var(--card-width);
+            height: var(--card-height);
             position: relative;
-            margin: 10px 0 20px 0;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            border-radius: 20px; /* Visual only, print overrides this */
         }
 
-        .pill-slider {
+        .card-wrapper.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
             position: absolute;
-            left: 5px;
-            top: 5px;
-            bottom: 5px;
-            width: calc(33.33% - 4px);
-            background: #000;
-            border-radius: 40px;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden; /* Hides back when flipped */
+            border-radius: 20px;
+            overflow: hidden;
+            background: white;
+        }
+
+        /* --- Front Side Design --- */
+        .card-front {
+            background: white;
+            position: relative;
+        }
+
+        /* Decorative Waves */
+        .wave-top {
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 150%;
+            height: 200px;
+            background: rgba(84, 140, 255, 0.15);
+            border-radius: 50%;
+            transform: rotate(-10deg);
+            z-index: 1;
+        }
+        
+        .wave-middle {
+            position: absolute;
+            top: 20%;
+            right: -60%;
+            width: 150%;
+            height: 300px;
+            background: rgba(84, 140, 255, 0.1);
+            border-radius: 50%;
+            transform: rotate(25deg);
             z-index: 1;
         }
 
-        .pill-item {
-            flex: 1;
-            text-align: center;
-            padding: 10px 0;
-            font-family: var(--font-head);
-            font-weight: 600;
-            font-size: 13px;
+        /* Avatar */
+        .avatar-container {
+            position: absolute;
+            bottom: 0;
+            left: -20px;
+            width: 85%;
             z-index: 2;
-            cursor: pointer;
-            color: #888;
+        }
+        .avatar-img {
+            width: 100%;
+            display: block;
+            filter: drop-shadow(5px 5px 15px rgba(0,0,0,0.2));
         }
 
-        .pill-item.active {
-            color: #fff;
-        }
-
-        /* 3. Calendar Grid */
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .day-name {
-            font-size: 12px;
-            color: #AAA;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .date-cell {
-            height: 40px;
+        /* Vertical Big Text (GONG YOO Style) */
+        .vertical-name {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            font-family: var(--font-head);
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            position: relative;
+            z-index: 3;
         }
 
-        .date-cell.active {
-            background: #000;
-            color: #fff;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .date-cell.has-dot::after {
-            content: '';
-            width: 4px;
-            height: 4px;
-            background: #000;
-            border-radius: 50%;
-            position: absolute;
-            bottom: 5px;
-        }
-
-        .date-cell.active::after {
-            background: #fff;
-        }
-
-        /* 4. Settings/Profile Items */
-        .stat-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            flex: 1;
-            background: #FAFAFA;
-            border: 1px solid #EEE;
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .stat-num {
-            font-size: 32px;
-            font-weight: 700;
-            color: #000;
-            font-family: var(--font-head);
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #777;
-            font-weight: 600;
+        .v-text {
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 0.9;
             text-transform: uppercase;
-            margin-top: 5px;
+            letter-spacing: -5px;
         }
 
-        .setting-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 0;
-            border-bottom: 1px solid #F5F5F5;
+        .v-text-1 {
+            color: var(--primary-blue);
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
         }
-
-        .setting-label {
-            font-weight: 600;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .toggle-switch {
-            width: 44px;
-            height: 24px;
-            background: #E0E0E0;
-            border-radius: 50px;
+        
+        .v-text-2 {
+            color: transparent;
+            -webkit-text-stroke: 2px var(--primary-blue);
             position: relative;
-            cursor: pointer;
+            left: -10px; /* Overlap effect */
         }
-
-        .toggle-switch::after {
-            content: '';
+        
+        /* Decoration Circle on Front */
+        .deco-circle {
             position: absolute;
-            left: 2px;
-            top: 2px;
-            width: 20px;
-            height: 20px;
-            background: #fff;
+            right: 45px;
+            bottom: 30%;
+            width: 60px;
+            height: 60px;
+            border: 3px solid white;
             border-radius: 50%;
-            transition: 0.3s;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 4;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
 
-        .toggle-switch.on {
-            background: #000;
+
+        /* --- Back Side Design --- */
+        .card-back {
+            background: var(--primary-blue);
+            color: white;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            position: relative;
         }
 
-        .toggle-switch.on::after {
-            left: 22px;
-        }
-
-        /* Screen Labels */
-        .screen-name {
+        /* Back Waves */
+        .back-wave-top {
             position: absolute;
-            bottom: -40px;
+            top: -20px;
+            right: -20px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        .back-wave-bottom {
+            position: absolute;
+            bottom: -50px;
+            left: -20px;
             width: 100%;
-            text-align: center;
-            font-family: var(--font-head);
-            font-weight: 600;
-            color: #666;
+            height: 150px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 100% 100% 0 0;
+            z-index: 0;
+        }
+
+        .back-content { z-index: 2; height: 100%; display: flex; flex-direction: column; }
+
+        .back-header { margin-bottom: 40px; }
+        .back-name {
+            font-size: 2.5rem;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+        .back-profession {
+            font-family: 'Kalam', cursive;
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .contact-list {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.9rem;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 400;
+        }
+
+        .contact-item i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 800px) {
+            .container { flex-direction: column; padding: 20px; }
+            .card-wrapper { transform: scale(0.9); }
+        }
+
+        /* --- PRINT CSS (Critical) --- */
+        @media print {
+            body { background: white; -webkit-print-color-adjust: exact; }
+            .editor-panel, .actions, h2 { display: none !important; }
+            .container { display: block; padding: 0; margin: 0; width: auto; max-width: none; }
+            .preview-panel { display: block; perspective: none; }
+            
+            /* Reset Layout for Print */
+            .card-wrapper {
+                box-shadow: none;
+                transition: none;
+                transform: none !important; /* Disable Flip */
+                position: relative;
+                
+                /* Standard Business Card Size (Vertical) */
+                width: 2in; 
+                height: 3.5in;
+                margin: 0;
+                display: flex; /* Trick to show elements */
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+
+            /* Show Both Sides */
+            .card-face {
+                position: relative;
+                width: 2in;
+                height: 3.5in;
+                border: 1px solid #ddd; /* Cutting guide */
+                border-radius: 0; /* Sharp edges for print */
+                page-break-inside: avoid;
+                top: auto; left: auto;
+                backface-visibility: visible;
+                transform: none !important;
+                float: left;
+                margin-right: 20px;
+                margin-bottom: 20px;
+            }
+
+            /* Adjust internal scaling for print size */
+            /* Since we designed for 320px screen width but printing at 2in (approx 192px at 96dpi), 
+               we need to scale the contents to fit the physical inch dimensions. 
+               Using zoom is the easiest hack for mixed unit printing. */
+            .card-face {
+                zoom: 0.6; /* Scale down pixel design to inch design */
+            }
         }
     </style>
 </head>
-
 <body>
 
-    <div class="container">
+<div class="container">
+    <div class="editor-panel">
+        <h2>Card Details</h2>
+        <div class="form-group">
+            <label>Upload Avatar (Transparent PNG recommended)</label>
+            <input type="file" id="imgInput" accept="image/*">
+        </div>
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="nameInput" value="Gong Yoo" placeholder="e.g. Gong Yoo">
+        </div>
+        <div class="form-group">
+            <label>Profession</label>
+            <input type="text" id="roleInput" value="Actor & Model" placeholder="e.g. Actor">
+        </div>
+        <div class="form-group">
+            <label>Phone</label>
+            <input type="text" id="phoneInput" value="+82 10-1234-5678">
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="emailInput" value="management@soop.com">
+        </div>
+        <div class="form-group">
+            <label>Address</label>
+            <input type="text" id="addressInput" value="Gangnam-gu, Seoul, Korea">
+        </div>
+        <div class="form-group">
+            <label>Website</label>
+            <input type="text" id="webInput" value="www.msoopent.com">
+        </div>
 
-        <div class="screen">
-            <div class="header">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div
-                        style="width: 40px; height: 40px; background: #000; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700;">
-                        R</div>
-                    <div>
-                        <div style="font-size: 12px; font-weight: 600; color: #888;">THURSDAY, 24</div>
-                        <div style="font-family: var(--font-head); font-weight: 700; font-size: 18px;">Today's Focus
+        <div class="actions">
+            <button class="btn btn-primary" onclick="toggleFlip()">Flip Card <i class="fas fa-sync-alt"></i></button>
+            <button class="btn btn-secondary" onclick="window.print()">Print Card <i class="fas fa-print"></i></button>
+        </div>
+    </div>
+
+    <div class="preview-panel">
+        <div class="card-wrapper" id="card">
+            
+            <div class="card-face card-front">
+                <div class="wave-top"></div>
+                <div class="wave-middle"></div>
+                
+                <div class="vertical-name" id="frontNameContainer">
+                    <span class="v-text v-text-1">GONG</span>
+                    <span class="v-text v-text-2">YOO</span>
+                </div>
+
+                <div class="deco-circle"></div>
+
+                <div class="avatar-container">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&clothing=blazerAndShirt&top=shortHairTheCaesar&hairColor=black&skinColor=light" class="avatar-img" id="avatarDisplay" alt="Avatar">
+                </div>
+            </div>
+
+            <div class="card-face card-back">
+                <div class="back-wave-top"></div>
+                
+                <div class="back-content">
+                    <div class="back-header">
+                        <div class="back-name" id="backName">GONG <br> YOO</div>
+                        <div class="back-profession" id="backRole">Actor</div>
+                    </div>
+
+                    <div class="contact-list">
+                        <div class="contact-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <span id="backPhone">+82 10-1234-5678</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span id="backAddress">Gangnam-gu, Seoul</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span id="backEmail">info@email.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-globe"></i>
+                            <span id="backWeb">www.website.com</span>
                         </div>
                     </div>
                 </div>
-                <button class="icon-btn"><i class="ri-notification-3-line"></i></button>
+
+                <div class="back-wave-bottom"></div>
             </div>
 
-            <div class="content">
-                <div style="background: #111; color: #fff; border-radius: 24px; padding: 24px; margin-bottom: 30px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <span style="font-weight: 600;">Daily Goals</span>
-                        <span style="font-family: var(--font-head); font-weight: 700;">60%</span>
-                    </div>
-                    <div style="height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px;">
-                        <div style="height: 100%; width: 60%; background: #fff; border-radius: 10px;"></div>
-                    </div>
-                    <p style="font-size: 12px; margin-top: 15px; opacity: 0.7;">3 of 5 tasks completed</p>
-                </div>
-
-                <h3 style="margin-bottom: 15px; font-size: 18px;">Priority</h3>
-
-                <div class="task-card">
-                    <div class="checkbox"></div>
-                    <div style="flex: 1;">
-                        <h4 style="font-size: 16px;">App Wireframe</h4>
-                        <p class="text-sm">Finish Home screen</p>
-                    </div>
-                    <div
-                        style="background: #F0F0F0; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;">
-                        HIGH</div>
-                </div>
-
-                <div class="task-card">
-                    <div class="checkbox checked"><i class="ri-check-line"></i></div>
-                    <div style="flex: 1; opacity: 0.5;">
-                        <h4 style="font-size: 16px; text-decoration: line-through;">Email Team</h4>
-                        <p class="text-sm">Weekly sync updates</p>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="bottom-nav">
-                <div class="nav-icon active"><i class="ri-home-fill"></i>
-                    <div class="nav-dot"></div>
-                </div>
-                <div class="nav-icon"><i class="ri-calendar-line"></i>
-                    <div class="nav-dot"></div>
-                </div>
-                <div class="nav-icon"
-                    style="background: #000; color: #fff; width: 50px; height: 50px; border-radius: 18px; display: flex; justify-content: center; align-items: center; margin-top: -30px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
-                    <i class="ri-add-line"></i></div>
-                <div class="nav-icon"><i class="ri-folder-3-line"></i>
-                    <div class="nav-dot"></div>
-                </div>
-                <div class="nav-icon"><i class="ri-user-3-line"></i>
-                    <div class="nav-dot"></div>
-                </div>
-            </div>
-
-            <div class="home-indicator"></div>
-            <div class="screen-name">1. Dashboard w/ Nav</div>
         </div>
-
-        <div class="screen">
-            <div class="header">
-                <button class="icon-btn" style="border:none;"><i class="ri-close-line"
-                        style="font-size: 24px;"></i></button>
-                <h2 class="title-md">Create</h2>
-                <button class="icon-btn"
-                    style="border:none; background: #000; color: #fff; width: auto; padding: 0 15px; font-size: 14px; font-weight: 600;">Save</button>
-            </div>
-
-            <div class="content">
-                <input type="text" placeholder="Task Name..."
-                    style="width: 100%; font-size: 28px; font-family: var(--font-head); font-weight: 600; border: none; outline: none; padding: 20px 0;">
-
-                <div style="display: flex; gap: 10px; margin-bottom: 25px;">
-                    <span
-                        style="padding: 8px 16px; background: #000; color: #fff; border-radius: 20px; font-size: 12px; font-weight: 600;">Design</span>
-                    <span
-                        style="padding: 8px 16px; border: 1px solid #EEE; border-radius: 20px; font-size: 12px; font-weight: 600;">Personal</span>
-                    <span
-                        style="padding: 8px 16px; border: 1px solid #EEE; border-radius: 20px; font-size: 12px; font-weight: 600;">Dev</span>
-                </div>
-
-                <label style="font-size: 12px; font-weight: 700; color: #999; letter-spacing: 1px;">SCHEDULE</label>
-                <div class="pill-nav-container">
-                    <div class="pill-slider"></div>
-                    <div class="pill-item active">Today</div>
-                    <div class="pill-item">Later</div>
-                    <div class="pill-item">Pick Date</div>
-                </div>
-
-                <label style="font-size: 12px; font-weight: 700; color: #999; letter-spacing: 1px;">NOTES</label>
-                <textarea
-                    style="width: 100%; height: 150px; border: 1px solid #EEE; border-radius: 16px; padding: 15px; margin-top: 10px; font-family: var(--font-body); font-size: 15px; outline: none; resize: none;"
-                    placeholder="Add details..."></textarea>
-
-                <div style="margin-top: 20px; display: flex; gap: 15px;">
-                    <div
-                        style="width: 60px; height: 60px; border: 2px dashed #CCC; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #CCC;">
-                        <i class="ri-attachment-line"></i></div>
-                </div>
-            </div>
-
-            <div class="home-indicator"></div>
-            <div class="screen-name">2. Add Task</div>
-        </div>
-
-        <div class="screen">
-            <div class="header">
-                <button class="icon-btn"><i class="ri-arrow-left-line"></i></button>
-                <button class="icon-btn"><i class="ri-more-2-fill"></i></button>
-            </div>
-
-            <div class="content">
-                <div style="margin-bottom: 20px;">
-                    <span style="font-family: var(--font-head); font-weight: 700; font-size: 12px; color: #999;">DESIGN
-                        PROJECT</span>
-                    <h1 style="font-size: 36px; line-height: 1.1; margin-top: 5px;">App Wireframe</h1>
-                </div>
-
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 30px;">
-                    <span style="font-weight: 600;">Today, 5:00 PM</span>
-                    <div style="width: 1px; height: 15px; background: #CCC; margin: 0 5px;"></div>
-                    <span style="color: #888; font-size: 14px;">High Priority</span>
-                </div>
-
-                <div style="background: #FAFAFA; border-radius: 20px; padding: 20px; margin-bottom: 20px;">
-                    <h4 style="margin-bottom: 10px;">Description</h4>
-                    <p style="color: #555; line-height: 1.6;">Create low-fidelity wireframes for the Home, Add Task, and
-                        Calendar screens. Focus on the monochrome aesthetic and spacing.</p>
-                </div>
-
-                <h4 style="margin-bottom: 10px;">Sub-tasks (2/3)</h4>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <i class="ri-checkbox-circle-fill" style="font-size: 20px;"></i> <span
-                            style="text-decoration: line-through; color: #999;">Sketch Paper Draft</span>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <i class="ri-checkbox-circle-fill" style="font-size: 20px;"></i> <span
-                            style="text-decoration: line-through; color: #999;">Define Layout Grid</span>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <i class="ri-checkbox-blank-circle-line" style="font-size: 20px;"></i> <span>Finalize
-                            Components</span>
-                    </div>
-                </div>
-            </div>
-
-            <div style="padding: 24px;">
-                <button
-                    style="width: 100%; padding: 20px; background: #000; color: #fff; border: none; border-radius: 20px; font-family: var(--font-head); font-size: 16px; font-weight: 600;">Complete
-                    Task</button>
-            </div>
-
-            <div class="home-indicator"></div>
-            <div class="screen-name">3. Task Details</div>
-        </div>
-
-        <div class="screen">
-            <div class="header">
-                <h2 class="title-md">Schedule</h2>
-                <button class="icon-btn"><i class="ri-search-line"></i></button>
-            </div>
-
-            <div class="content">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <button class="icon-btn" style="width: 36px; height: 36px;"><i
-                            class="ri-arrow-left-s-line"></i></button>
-                    <span style="font-family: var(--font-head); font-weight: 700; font-size: 18px;">October 2023</span>
-                    <button class="icon-btn" style="width: 36px; height: 36px;"><i
-                            class="ri-arrow-right-s-line"></i></button>
-                </div>
-
-                <div class="calendar-grid">
-                    <div class="day-name">M</div>
-                    <div class="day-name">T</div>
-                    <div class="day-name">W</div>
-                    <div class="day-name">T</div>
-                    <div class="day-name">F</div>
-                    <div class="day-name">S</div>
-                    <div class="day-name">S</div>
-
-                    <div class="date-cell" style="color: #CCC;">28</div>
-                    <div class="date-cell" style="color: #CCC;">29</div>
-                    <div class="date-cell" style="color: #CCC;">30</div>
-                    <div class="date-cell">1</div>
-                    <div class="date-cell has-dot">2</div>
-                    <div class="date-cell">3</div>
-                    <div class="date-cell">4</div>
-                    <div class="date-cell has-dot">5</div>
-                    <div class="date-cell active">6</div>
-                    <div class="date-cell">7</div>
-                    <div class="date-cell has-dot">8</div>
-                    <div class="date-cell">9</div>
-                    <div class="date-cell">10</div>
-                    <div class="date-cell">11</div>
-                </div>
-
-                <div style="height: 1px; background: #F0F0F0; margin: 20px 0;"></div>
-
-                <h4 style="margin-bottom: 15px;">Oct 6th</h4>
-
-                <div class="task-card">
-                    <div style="width: 4px; height: 40px; background: #000; border-radius: 4px; margin-right: 15px;">
-                    </div>
-                    <div>
-                        <h4 style="font-size: 15px;">Design Review</h4>
-                        <p class="text-sm">10:00 AM - 11:30 AM</p>
-                    </div>
-                </div>
-
-                <div class="task-card">
-                    <div style="width: 4px; height: 40px; background: #E0E0E0; border-radius: 4px; margin-right: 15px;">
-                    </div>
-                    <div>
-                        <h4 style="font-size: 15px;">Lunch Break</h4>
-                        <p class="text-sm">1:00 PM</p>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="bottom-nav">
-                <div class="nav-icon"><i class="ri-home-line"></i>
-                    <div class="nav-dot"></div>
-                </div>
-                <div class="nav-icon active"><i class="ri-calendar-fill"></i>
-                    <div class="nav-dot"></div>
-                </div>
-                <div class="nav-icon"
-                    style="background: #000; color: #fff; width: 50px; height: 50px; border-radius: 18px; display: flex; justify-content: center; align-items: center; margin-top: -30px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
-                    <i class="ri-add-line"></i></div>
-                <div class="nav-icon"><i class="ri-folder-3-line"></i>
-                    <div class="nav-dot"></div>
-                </div>
-                <div class="nav-icon"><i class="ri-user-3-line"></i>
-                    <div class="nav-dot"></div>
-                </div>
-            </div>
-
-            <div class="home-indicator"></div>
-            <div class="screen-name">4. Calendar View</div>
-        </div>
-
-        <div class="screen">
-            <div class="header"
-                style="justify-content: center; flex-direction: column; padding-bottom: 30px; border-bottom: 1px solid #F0F0F0;">
-                <div
-                    style="width: 100px; height: 100px; background: #F0F0F0; border-radius: 50%; border: 3px solid #000; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; font-size: 40px; margin-top: 20px;">
-                    👾
-                </div>
-                <h2 style="font-size: 24px;">Arpit Pandey</h2>
-                <p class="text-sm">Product Designer</p>
-                <button
-                    style="margin-top: 15px; padding: 8px 16px; border: 1px solid #CCC; background: transparent; border-radius: 20px; font-size: 12px; font-weight: 600;">Edit
-                    Profile</button>
-            </div>
-
-            <div class="content" style="padding-top: 30px;">
-                <div class="stat-row">
-                    <div class="stat-card">
-                        <div class="stat-num">142</div>
-                        <div class="stat-label">Done</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-num">12</div>
-                        <div class="stat-label">Pending</div>
-                    </div>
-                </div>
-
-                <h4 style="margin-bottom: 10px;">Settings</h4>
-
-                <div class="setting-item">
-                    <div class="setting-label"><i class="ri-moon-line"></i> Dark Mode</div>
-                    <div class="toggle-switch"></div>
-                </div>
-
-                <div class="setting-item">
-                    <div class="setting-label"><i class="ri-notification-3-line"></i> Notifications</div>
-                    <div class="toggle-switch on"></div>
-                </div>
-
-
-                <div class="setting-item" style="border: none;">
-                    <div class="setting-label" style="color: red;"><i class="ri-logout-box-r-line"></i> Log Out</div>
-                </div>
-
-            </div>
-
-            <div class="bottom-nav">
-                <div class="nav-icon"><i class="ri-home-line"></i>
-                    <div class="nav-dot"></div>
-                </div>
-                <div class="nav-icon"><i class="ri-calendar-line"></i>
-                    <div class="nav-dot"></div>
-                </div>
-                <div class="nav-icon"
-                    style="background: #000; color: #fff; width: 50px; height: 50px; border-radius: 18px; display: flex; justify-content: center; align-items: center; margin-top: -30px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
-                    <i class="ri-add-line"></i></div>
-                <div class="nav-icon"><i class="ri-folder-3-line"></i>
-                    <div class="nav-dot"></div>
-                </div>
-                <div class="nav-icon active"><i class="ri-user-3-fill"></i>
-                    <div class="nav-dot"></div>
-                </div>
-            </div>
-
-            <div class="home-indicator"></div>
-            <div class="screen-name">5. Profile & Settings</div>
-        </div>
-
     </div>
+</div>
+
+<script>
+    // --- Live Update Logic ---
+    const inputs = {
+        name: document.getElementById('nameInput'),
+        role: document.getElementById('roleInput'),
+        phone: document.getElementById('phoneInput'),
+        email: document.getElementById('emailInput'),
+        address: document.getElementById('addressInput'),
+        web: document.getElementById('webInput'),
+        img: document.getElementById('imgInput')
+    };
+
+    const outputs = {
+        frontContainer: document.getElementById('frontNameContainer'),
+        backName: document.getElementById('backName'),
+        backRole: document.getElementById('backRole'),
+        backPhone: document.getElementById('backPhone'),
+        backEmail: document.getElementById('backEmail'),
+        backAddress: document.getElementById('backAddress'),
+        backWeb: document.getElementById('backWeb'),
+        avatar: document.getElementById('avatarDisplay')
+    };
+
+    // Update Text Fields
+    function updateCard() {
+        // Back side updates are simple
+        outputs.backName.innerHTML = inputs.name.value.replace(' ', '<br>');
+        outputs.backRole.textContent = inputs.role.value;
+        outputs.backPhone.textContent = inputs.phone.value;
+        outputs.backEmail.textContent = inputs.email.value;
+        outputs.backAddress.textContent = inputs.address.value;
+        outputs.backWeb.textContent = inputs.web.value;
+
+        // Front Side Logic: Split name for the stylish effect
+        const fullName = inputs.name.value.trim().split(' ');
+        let html = '';
+        if (fullName.length > 0) {
+            // First part (Solid Color)
+            html += `<span class="v-text v-text-1">${fullName[0]}</span>`;
+        }
+        if (fullName.length > 1) {
+            // Remaining parts (Outlined)
+            html += `<span class="v-text v-text-2">${fullName.slice(1).join(' ')}</span>`;
+        }
+        outputs.frontContainer.innerHTML = html;
+    }
+
+    // Attach Event Listeners to all text inputs
+    Object.values(inputs).forEach(input => {
+        if(input.type === 'text' || input.type === 'email') {
+            input.addEventListener('input', updateCard);
+        }
+    });
+
+    // --- Image Upload Logic ---
+    inputs.img.addEventListener('change', function(e) {
+        if (e.target.files && e.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                outputs.avatar.src = e.target.result;
+            }
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    });
+
+    // --- Flip Logic ---
+    function toggleFlip() {
+        document.getElementById('card').classList.toggle('flipped');
+    }
+</script>
 
 </body>
-
 </html>
